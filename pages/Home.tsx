@@ -64,10 +64,13 @@ const Home = () => {
 
     const handleGenerateClick = (e) => {
         e.preventDefault();
+        const query = activeTab === 'ingredients' ? ingredients : searchQuery;
+        if (!query.trim()) return;
+
         if (user?.subscriptionStatus !== 'active') {
             window.open('https://www.effectivegatecpm.com/hzw1vrc0b?key=9da518ea4a20115382089c5630b72478', '_blank');
         }
-        // Proceed with generation for all users
+        
         generateAndNavigate();
     };
 

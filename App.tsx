@@ -14,6 +14,7 @@ import History from './pages/History';
 import ShoppingList from './pages/ShoppingList';
 import ShoppingAssistant from './pages/ShoppingAssistant';
 import AdminPanel from './pages/AdminPanel';
+import { ToastContainer } from 'react-toastify';
 
 // FIX: Switched to explicitly typing props to resolve issues with React.FC and children.
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -54,34 +55,55 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
     return <>{children}</>;
 };
 
+const AppRoutes = () => {
+    const { theme } = useContext(AppContext);
+    return (
+        <>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route 
+                    path="/" 
+                    element={
+                    <ProtectedRoute>
+                        <Layout>
+                        <Home />
+                        </Layout>
+                    </ProtectedRoute>
+                    } 
+                />
+                <Route path="/results" element={<ProtectedRoute><Layout><Results /></Layout></ProtectedRoute>} />
+                <Route path="/details/:id" element={<ProtectedRoute><Layout><Details /></Layout></ProtectedRoute>} />
+                <Route path="/cooking/:id" element={<ProtectedRoute><CookingMode /></ProtectedRoute>} />
+                <Route path="/planner" element={<ProtectedRoute><Layout><Planner /></Layout></ProtectedRoute>} />
+                <Route path="/pantry" element={<ProtectedRoute><Layout><Pantry /></Layout></ProtectedRoute>} />
+                <Route path="/profile" element={<ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>} />
+                <Route path="/history" element={<ProtectedRoute><Layout><History /></Layout></ProtectedRoute>} />
+                <Route path="/shopping-list" element={<ProtectedRoute><Layout><ShoppingList /></Layout></ProtectedRoute>} />
+                <Route path="/assistant" element={<ProtectedRoute><Layout><ShoppingAssistant /></Layout></ProtectedRoute>} />
+                <Route path="/admin" element={<AdminRoute><Layout><AdminPanel /></Layout></AdminRoute>} />
+                <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={4000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme={theme}
+            />
+        </>
+    );
+};
+
+
 function App() {
   return (
     <AppProvider>
       <HashRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route 
-            path="/" 
-            element={
-              <ProtectedRoute>
-                <Layout>
-                  <Home />
-                </Layout>
-              </ProtectedRoute>
-            } 
-          />
-          <Route path="/results" element={<ProtectedRoute><Layout><Results /></Layout></ProtectedRoute>} />
-          <Route path="/details/:id" element={<ProtectedRoute><Layout><Details /></Layout></ProtectedRoute>} />
-          <Route path="/cooking/:id" element={<ProtectedRoute><CookingMode /></ProtectedRoute>} />
-          <Route path="/planner" element={<ProtectedRoute><Layout><Planner /></Layout></ProtectedRoute>} />
-          <Route path="/pantry" element={<ProtectedRoute><Layout><Pantry /></Layout></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>} />
-          <Route path="/history" element={<ProtectedRoute><Layout><History /></Layout></ProtectedRoute>} />
-          <Route path="/shopping-list" element={<ProtectedRoute><Layout><ShoppingList /></Layout></ProtectedRoute>} />
-          <Route path="/assistant" element={<ProtectedRoute><Layout><ShoppingAssistant /></Layout></ProtectedRoute>} />
-          <Route path="/admin" element={<AdminRoute><Layout><AdminPanel /></Layout></AdminRoute>} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Routes>
+        <AppRoutes />
       </HashRouter>
     </AppProvider>
   );
