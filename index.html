@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MealMind AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-toastify@9.1.3/dist/ReactToastify.min.css">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: {
+                DEFAULT: '#16A34A', // green-600
+                light: '#22C55E', // green-500
+                dark: '#15803D', // green-700
+                foreground: '#ffffff'
+              },
+              secondary: {
+                DEFAULT: '#F59E0B', // amber-500
+                light: '#FBBF24', // amber-400
+                dark: '#D97706', // amber-600
+                foreground: '#ffffff'
+              },
+              background: '#FAFAF9',      // stone-50
+              dark: '#0c0a09',            // stone-950
+              foreground: '#1c1917',      // stone-900
+              muted: {
+                DEFAULT: '#F5F5F4',     // stone-100
+                foreground: '#78716c'   // stone-500
+              },
+              border: '#E7E5E4',          // stone-200
+            },
+            fontFamily: {
+              sans: ['Inter', 'Noto Sans Bengali', 'sans-serif'],
+              display: ['Poppins', 'Noto Sans Bengali', 'sans-serif'],
+            },
+            boxShadow: {
+              'input': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+              'card': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+            },
+            borderRadius: {
+              'xl': '0.75rem',
+              '2xl': '1rem',
+              '3xl': '1.5rem',
+            },
+            animation: {
+              'fadeIn': 'fadeIn 0.5s ease-out forwards',
+              'slideUp': 'slideUp 0.5s ease-out forwards',
+              'scaleIn': 'scaleIn 0.3s ease-out forwards',
+              'slideInFromLeft': 'slideInFromLeft 0.3s ease-out forwards',
+            },
+            keyframes: {
+              fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+              slideUp: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+              scaleIn: { '0%': { opacity: '0', transform: 'scale(0.95)' }, '100%': { opacity: '1', transform: 'scale(1)' } },
+              'slideInFromLeft': { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(0)' } },
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+      .dark ::-webkit-scrollbar-thumb { background: #475569; }
+      .dark ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+      .hide-scrollbar::-webkit-scrollbar { display: none; }
+      .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+      input::placeholder, textarea::placeholder {
+        background-color: #e0f2f1; /* A light green color */
+        color: #16A34A; /* Primary color */
+        opacity: 0.6;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^7.9.6",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.1",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.553.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react-toastify": "https://aistudiocdn.com/react-toastify@^11.0.5"
+  }
+}
+</script>
+</head>
+  <body class="min-h-screen text-foreground antialiased bg-background selection:bg-primary/20 selection:text-primary-dark">
+    <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
+  </body>
+</html>
