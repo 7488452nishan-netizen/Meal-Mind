@@ -242,6 +242,18 @@ const translations = {
         error_txid_required: "Transaction ID is required.",
         error_geolocation_unsupported: "Geolocation is not supported by your browser.",
         error_geolocation_unavailable: "Unable to retrieve your location. Please enable location services.",
+        // Toasts
+        toast_login_success: "Login successful!",
+        toast_login_fail: "Invalid credentials.",
+        toast_signup_success: "Account created successfully!",
+        toast_payment_submitted: "Payment submitted for review.",
+        toast_sub_approved: "Subscription approved!",
+        toast_sub_rejected: "Subscription rejected.",
+        toast_sub_updated: "User subscription updated.",
+        toast_payment_method_added: "Payment method added.",
+        toast_payment_method_removed: "Payment method removed.",
+        toast_timer_finished: "Timer finished!",
+        toast_admin_add_method_fail_fields_required: "Both name and details are required.",
     },
     bn: {
         // Nav
@@ -479,6 +491,18 @@ const translations = {
         error_txid_required: "লেনদেন আইডি প্রয়োজন।",
         error_geolocation_unsupported: "আপনার ব্রাউজার জিওলোকেশন সমর্থন করে না।",
         error_geolocation_unavailable: "আপনার অবস্থান পুনরুদ্ধার করা যাচ্ছে না। অনুগ্রহ করে অবস্থান পরিষেবা সক্রিয় করুন।",
+        // Toasts
+        toast_login_success: "লগইন সফল হয়েছে!",
+        toast_login_fail: "অবৈধ প্রমাণপত্র।",
+        toast_signup_success: "অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!",
+        toast_payment_submitted: "পেমেন্ট পর্যালোচনার জন্য জমা দেওয়া হয়েছে।",
+        toast_sub_approved: "সাবস্ক্রিপশন অনুমোদিত হয়েছে!",
+        toast_sub_rejected: "সাবস্ক্রিপশন প্রত্যাখ্যান করা হয়েছে।",
+        toast_sub_updated: "ব্যবহারকারীর সাবস্ক্রিপশন আপডেট করা হয়েছে।",
+        toast_payment_method_added: "পেমেন্ট পদ্ধতি যোগ করা হয়েছে।",
+        toast_payment_method_removed: "পেমেন্ট পদ্ধতি সরানো হয়েছে।",
+        toast_timer_finished: "টাইমার শেষ হয়েছে!",
+        toast_admin_add_method_fail_fields_required: "নাম এবং বিবরণ উভয়ই প্রয়োজন।",
     },
     es: {
         nav_home: 'Inicio',
@@ -616,6 +640,18 @@ const translations = {
         error_txid_required: "Se requiere el ID de la transacción.",
         error_geolocation_unsupported: "La geolocalización no es compatible con su navegador.",
         error_geolocation_unavailable: "No se puede recuperar su ubicación. Por favor, habilite los servicios de ubicación.",
+        // Toasts
+        toast_login_success: "¡Inicio de sesión exitoso!",
+        toast_login_fail: "Credenciales inválidas.",
+        toast_signup_success: "¡Cuenta creada con éxito!",
+        toast_payment_submitted: "Pago enviado para revisión.",
+        toast_sub_approved: "¡Suscripción aprobada!",
+        toast_sub_rejected: "Suscripción rechazada.",
+        toast_sub_updated: "Suscripción de usuario actualizada.",
+        toast_payment_method_added: "Método de pago añadido.",
+        toast_payment_method_removed: "Método de pago eliminado.",
+        toast_timer_finished: "¡Temporizador finalizado!",
+        toast_admin_add_method_fail_fields_required: "Se requieren tanto el nombre como los detalles.",
     },
     fr: {
         nav_home: 'Accueil',
@@ -751,6 +787,18 @@ const translations = {
         error_txid_required: "L'ID de transaction est requis.",
         error_geolocation_unsupported: "La géolocalisation n'est pas prise en charge par votre navigateur.",
         error_geolocation_unavailable: "Impossible de récupérer votre position. Veuillez activer les services de localisation.",
+        // Toasts
+        toast_login_success: "Connexion réussie !",
+        toast_login_fail: "Identifiants invalides.",
+        toast_signup_success: "Compte créé avec succès !",
+        toast_payment_submitted: "Paiement soumis pour examen.",
+        toast_sub_approved: "Abonnement approuvé !",
+        toast_sub_rejected: "Abonnement rejeté.",
+        toast_sub_updated: "Abonnement utilisateur mis à jour.",
+        toast_payment_method_added: "Méthode de paiement ajoutée.",
+        toast_payment_method_removed: "Méthode de paiement supprimée.",
+        toast_timer_finished: "Minuteur terminé !",
+        toast_admin_add_method_fail_fields_required: "Le nom et les détails sont tous deux requis.",
     },
     ja: {
         nav_home: 'ホーム',
@@ -886,6 +934,18 @@ const translations = {
         error_txid_required: "取引IDが必要です。",
         error_geolocation_unsupported: "お使いのブラウザは位置情報をサポートしていません。",
         error_geolocation_unavailable: "位置情報を取得できません。位置情報サービスを有効にしてください。",
+        // Toasts
+        toast_login_success: "ログインに成功しました！",
+        toast_login_fail: "無効な認証情報です。",
+        toast_signup_success: "アカウントが正常に作成されました！",
+        toast_payment_submitted: "支払いがレビューのために送信されました。",
+        toast_sub_approved: "サブスクリプションが承認されました！",
+        toast_sub_rejected: "サブスクリプションが拒否されました。",
+        toast_sub_updated: "ユーザーのサブスクリプションが更新されました。",
+        toast_payment_method_added: "支払い方法が追加されました。",
+        toast_payment_method_removed: "支払い方法が削除されました。",
+        toast_timer_finished: "タイマーが終了しました！",
+        toast_admin_add_method_fail_fields_required: "名前と詳細の両方が必要です。",
     },
     de: {
         nav_home: "Startseite",
@@ -922,6 +982,18 @@ const translations = {
         error_txid_required: 'Transaktions-ID ist erforderlich.',
         error_geolocation_unsupported: 'Geolokalisierung wird von Ihrem Browser nicht unterstützt.',
         error_geolocation_unavailable: 'Ihr Standort konnte nicht abgerufen werden. Bitte aktivieren Sie die Ortungsdienste.',
+        // Toasts
+        toast_login_success: "Login successful!",
+        toast_login_fail: "Invalid credentials.",
+        toast_signup_success: "Account created successfully!",
+        toast_payment_submitted: "Payment submitted for review.",
+        toast_sub_approved: "Subscription approved!",
+        toast_sub_rejected: "Subscription rejected.",
+        toast_sub_updated: "User subscription updated.",
+        toast_payment_method_added: "Payment method added.",
+        toast_payment_method_removed: "Payment method removed.",
+        toast_timer_finished: "Timer finished!",
+        toast_admin_add_method_fail_fields_required: "Both name and details are required.",
     },
     it: {
         nav_home: "Home",
@@ -958,6 +1030,18 @@ const translations = {
         error_txid_required: 'ID transazione richiesto.',
         error_geolocation_unsupported: 'La geolocalizzazione non è supportata dal tuo browser.',
         error_geolocation_unavailable: 'Impossibile recuperare la tua posizione. Abilita i servizi di localizzazione.',
+        // Toasts
+        toast_login_success: "Login successful!",
+        toast_login_fail: "Invalid credentials.",
+        toast_signup_success: "Account created successfully!",
+        toast_payment_submitted: "Payment submitted for review.",
+        toast_sub_approved: "Subscription approved!",
+        toast_sub_rejected: "Subscription rejected.",
+        toast_sub_updated: "User subscription updated.",
+        toast_payment_method_added: "Payment method added.",
+        toast_payment_method_removed: "Payment method removed.",
+        toast_timer_finished: "Timer finished!",
+        toast_admin_add_method_fail_fields_required: "Both name and details are required.",
     },
     pt: {
         nav_home: "Início",
@@ -994,6 +1078,18 @@ const translations = {
         error_txid_required: 'O ID da transação é obrigatório.',
         error_geolocation_unsupported: 'A geolocalização não é suportada pelo seu navegador.',
         error_geolocation_unavailable: 'Não é possível recuperar a sua localização. Por favor, ative os serviços de localização.',
+        // Toasts
+        toast_login_success: "Login successful!",
+        toast_login_fail: "Invalid credentials.",
+        toast_signup_success: "Account created successfully!",
+        toast_payment_submitted: "Payment submitted for review.",
+        toast_sub_approved: "Subscription approved!",
+        toast_sub_rejected: "Subscription rejected.",
+        toast_sub_updated: "User subscription updated.",
+        toast_payment_method_added: "Payment method added.",
+        toast_payment_method_removed: "Payment method removed.",
+        toast_timer_finished: "Timer finished!",
+        toast_admin_add_method_fail_fields_required: "Both name and details are required.",
     },
     ko: {
         nav_home: "홈",
@@ -1030,6 +1126,18 @@ const translations = {
         error_txid_required: '거래 ID가 필요합니다.',
         error_geolocation_unsupported: '브라우저에서 위치 정보가 지원되지 않습니다.',
         error_geolocation_unavailable: '위치를 가져올 수 없습니다. 위치 서비스를 활성화하십시오.',
+        // Toasts
+        toast_login_success: "Login successful!",
+        toast_login_fail: "Invalid credentials.",
+        toast_signup_success: "Account created successfully!",
+        toast_payment_submitted: "Payment submitted for review.",
+        toast_sub_approved: "Subscription approved!",
+        toast_sub_rejected: "Subscription rejected.",
+        toast_sub_updated: "User subscription updated.",
+        toast_payment_method_added: "Payment method added.",
+        toast_payment_method_removed: "Payment method removed.",
+        toast_timer_finished: "Timer finished!",
+        toast_admin_add_method_fail_fields_required: "Both name and details are required.",
     },
     zh: {
         nav_home: "首页",
@@ -1066,6 +1174,18 @@ const translations = {
         error_txid_required: '交易ID是必需的。',
         error_geolocation_unsupported: '您的浏览器不支持地理位置。',
         error_geolocation_unavailable: '无法获取您的位置。请启用定位服务。',
+        // Toasts
+        toast_login_success: "Login successful!",
+        toast_login_fail: "Invalid credentials.",
+        toast_signup_success: "Account created successfully!",
+        toast_payment_submitted: "Payment submitted for review.",
+        toast_sub_approved: "Subscription approved!",
+        toast_sub_rejected: "Subscription rejected.",
+        toast_sub_updated: "User subscription updated.",
+        toast_payment_method_added: "Payment method added.",
+        toast_payment_method_removed: "Payment method removed.",
+        toast_timer_finished: "Timer finished!",
+        toast_admin_add_method_fail_fields_required: "Both name and details are required.",
     },
     hi: {
         nav_home: "होम",
@@ -1102,6 +1222,18 @@ const translations = {
         error_txid_required: 'लेन-देन आईडी आवश्यक है।',
         error_geolocation_unsupported: 'आपका ब्राउज़र जियोलोकेशन का समर्थन नहीं करता है।',
         error_geolocation_unavailable: 'आपका स्थान पुनर्प्राप्त करने में असमर्थ। कृपया स्थान सेवाएँ सक्षम करें।',
+        // Toasts
+        toast_login_success: "Login successful!",
+        toast_login_fail: "Invalid credentials.",
+        toast_signup_success: "Account created successfully!",
+        toast_payment_submitted: "Payment submitted for review.",
+        toast_sub_approved: "Subscription approved!",
+        toast_sub_rejected: "Subscription rejected.",
+        toast_sub_updated: "User subscription updated.",
+        toast_payment_method_added: "Payment method added.",
+        toast_payment_method_removed: "Payment method removed.",
+        toast_timer_finished: "Timer finished!",
+        toast_admin_add_method_fail_fields_required: "Both name and details are required.",
     },
     ar: {
         nav_home: "الرئيسية",
@@ -1138,6 +1270,18 @@ const translations = {
         error_txid_required: 'معرف المعاملة مطلوب.',
         error_geolocation_unsupported: 'متصفحك لا يدعم تحديد الموقع الجغرافي.',
         error_geolocation_unavailable: 'غير قادر على استرداد موقعك. يرجى تمكين خدمات الموقع.',
+        // Toasts
+        toast_login_success: "Login successful!",
+        toast_login_fail: "Invalid credentials.",
+        toast_signup_success: "Account created successfully!",
+        toast_payment_submitted: "Payment submitted for review.",
+        toast_sub_approved: "Subscription approved!",
+        toast_sub_rejected: "Subscription rejected.",
+        toast_sub_updated: "User subscription updated.",
+        toast_payment_method_added: "Payment method added.",
+        toast_payment_method_removed: "Payment method removed.",
+        toast_timer_finished: "Timer finished!",
+        toast_admin_add_method_fail_fields_required: "Both name and details are required.",
     }
 };
 
@@ -1267,10 +1411,10 @@ export const AppProvider = ({ children }) => {
                 const payments = await api.apiGetPendingPayments();
                 setPendingPayments(payments);
             }
-            toast.success("Login successful!");
+            toast.success(t('toast_login_success'));
             return true;
         }
-        toast.error("Invalid credentials.");
+        toast.error(t('toast_login_fail'));
         return false;
     };
 
@@ -1283,7 +1427,7 @@ export const AppProvider = ({ children }) => {
             setShoppingList([]);
             setHistory([]);
             setSavedRecipes([]);
-            toast.success("Account created successfully!");
+            toast.success(t('toast_signup_success'));
             return true;
         }
         toast.error(t(result.message));
@@ -1386,7 +1530,7 @@ export const AppProvider = ({ children }) => {
         if (result.success) {
             setPendingPayments(result.pendingPayments!);
             setAllUsers(result.users!);
-            toast.success("Payment submitted for review.");
+            toast.success(t("toast_payment_submitted"));
             return true;
         }
         return false;
@@ -1397,7 +1541,7 @@ export const AppProvider = ({ children }) => {
         if (result.success) {
             setPendingPayments(result.pendingPayments!);
             setAllUsers(result.users!);
-            toast.success("Subscription approved!");
+            toast.success(t("toast_sub_approved"));
         }
     };
     
@@ -1406,7 +1550,7 @@ export const AppProvider = ({ children }) => {
         if (result.success) {
             setPendingPayments(result.pendingPayments!);
             setAllUsers(result.users!);
-            toast.error("Subscription rejected.");
+            toast.error(t("toast_sub_rejected"));
         }
     };
     
@@ -1414,20 +1558,20 @@ export const AppProvider = ({ children }) => {
         const result = await api.apiUpdateUserSubscription(userId, newStatus);
         if (result.success) {
             setAllUsers(result.users!);
-            toast.info("User subscription updated.");
+            toast.info(t("toast_sub_updated"));
         }
     };
 
     const addPaymentMethod = async (method: Omit<PaymentMethod, 'id'>) => {
         const updatedMethods = await api.apiAddPaymentMethod(method);
         setPaymentMethods(updatedMethods);
-        toast.success("Payment method added.");
+        toast.success(t("toast_payment_method_added"));
     };
 
     const deletePaymentMethod = async (methodId: string) => {
         const updatedMethods = await api.apiDeletePaymentMethod(methodId);
         setPaymentMethods(updatedMethods);
-        toast.info("Payment method removed.");
+        toast.info(t("toast_payment_method_removed"));
     };
     
     useEffect(() => {
@@ -1439,10 +1583,10 @@ export const AppProvider = ({ children }) => {
         } else if (globalTimer.remainingSeconds === 0 && globalTimer.isActive) {
             setGlobalTimer({ isActive: false, isPaused: false, remainingSeconds: 0, recipeId: null, recipeTitle: null });
             new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg').play();
-            toast.info("Timer finished!");
+            toast.info(t("toast_timer_finished"));
         }
         return () => clearInterval(interval);
-    }, [globalTimer]);
+    }, [globalTimer, t]);
 
     const startGlobalTimer = (recipeId, recipeTitle, durationSeconds) => setGlobalTimer({ isActive: true, isPaused: false, remainingSeconds: durationSeconds, recipeId, recipeTitle });
     const togglePauseGlobalTimer = () => setGlobalTimer(prev => ({ ...prev, isPaused: !prev.isPaused }));
@@ -1470,7 +1614,8 @@ export const AppProvider = ({ children }) => {
     }), [
         user, isInitialLoading, language, theme, generatedRecipes, history, shoppingList, pantry, savedRecipes, globalTimer, pendingPayments, allUsers, t, paymentMethods,
         addToHistory, addToShoppingList, updateShoppingListItem, removeShoppingListItem, toggleAllShoppingListItems,
-        addToPantry, updatePantryItem, removePantryItem, toggleSaveRecipe, signInUser, signUpUser, signOutUser
+        addToPantry, updatePantryItem, removePantryItem, toggleSaveRecipe, signInUser, signUpUser, signOutUser,
+        toggleTheme, submitForPremium, approvePayment, rejectPayment, updateUserSubscriptionStatusByAdmin, addPaymentMethod, deletePaymentMethod, startGlobalTimer, togglePauseGlobalTimer, stopGlobalTimer
     ]);
 
     return (

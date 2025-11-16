@@ -61,20 +61,17 @@ const Home = () => {
     const [numberOfRecipes, setNumberOfRecipes] = useState(3);
     const [diet, setDiet] = useState('');
     const [cookingTime, setCookingTime] = useState('');
-    const [showAd, setShowAd] = useState(false);
 
     const handleGenerateClick = (e) => {
         e.preventDefault();
-        if (user?.subscriptionStatus === 'active') {
-            handleAdFinish();
-        } else {
+        if (user?.subscriptionStatus !== 'active') {
             window.open('https://www.effectivegatecpm.com/hzw1vrc0b?key=9da518ea4a20115382089c5630b72478', '_blank');
-            setShowAd(true);
         }
+        // Proceed with generation for all users
+        generateAndNavigate();
     };
 
-    const handleAdFinish = async () => {
-        setShowAd(false);
+    const generateAndNavigate = async () => {
         const query = activeTab === 'ingredients' ? ingredients : searchQuery;
         if (!query.trim()) return;
 
@@ -106,11 +103,6 @@ const Home = () => {
         }
     };
     
-
-    if (showAd) {
-        return <Ads type="interstitial" onFinish={handleAdFinish} />;
-    }
-
     return (
         <div className="flex flex-col items-center justify-center text-center animate-fadeIn p-4">
             <div className="p-4 bg-primary/10 rounded-full mb-4">

@@ -154,7 +154,7 @@ const PaymentMethodManagement = () => {
     const handleAddMethod = async (e) => {
         e.preventDefault();
         if (!newMethodName.trim() || !newMethodDetails.trim()) {
-            toast.error("Both name and details are required.");
+            toast.error(t("toast_admin_add_method_fail_fields_required"));
             return;
         }
         setIsLoading(true);
