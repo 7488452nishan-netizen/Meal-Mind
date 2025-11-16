@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
-import { AppContextType, UserProfile, Language, Recipe, HistoryItem, ShoppingListItem, PantryItem, TimerState, PendingPayment } from '../types';
+import { AppContextType, UserProfile, Language, Recipe, HistoryItem, ShoppingListItem, PantryItem, TimerState, PendingPayment, PaymentMethod } from '../types';
 import { toast } from 'react-toastify';
 import * as api from '../services/apiService';
 
@@ -9,14 +9,17 @@ const translations = {
     en: {
         // Nav
         nav_home: 'Home',
+        nav_home_mobile: 'Home',
         nav_meal_plan: 'Meal Plan',
         nav_meal_plan_mobile: 'Plan',
         nav_pantry: 'Smart Kitchen',
-        nav_pantry_mobile: 'Pantry',
+        nav_pantry_mobile: 'Kitchen',
         nav_shopping_list: 'Shopping List',
         nav_shopping_list_mobile: 'List',
         nav_assistant: 'Assistant',
+        nav_assistant_mobile: 'Assistant',
         nav_profile: 'Profile',
+        nav_profile_mobile: 'Profile',
         
         // Home Page
         home_title: "What's in your Kitchen?",
@@ -81,6 +84,15 @@ const translations = {
         admin_na: "N/A",
         admin_requested: "Requested",
         admin_admin_tag: "(Admin)",
+        admin_premium_since: 'Premium Since',
+        admin_premium_renews: 'Renews On',
+        admin_payment_methods: 'Payment Methods',
+        admin_add_new_method: 'Add New Method',
+        admin_method_name: 'Method Name',
+        admin_method_details: 'Details / Number',
+        admin_add_method: 'Add Method',
+        admin_delete_method: 'Delete',
+        admin_current_methods: 'Current Methods',
         
         // Profile & Premium
         subscription_status: 'Subscription Status',
@@ -110,6 +122,8 @@ const translations = {
         payment_send_to: "Please send payment to one of the numbers below:",
         payment_bkash: "Bkash",
         payment_nagad: "Nagad",
+        premium_plan_price: "Premium Plan: 100 BDT / month",
+        payment_instruction_send_money: "Instruction: Use the 'Send Money' option. Do not use 'Cash Out'.",
         
         // Shopping Assistant
         find_stores: "Find Best Stores",
@@ -146,9 +160,9 @@ const translations = {
         pantry_sort_name_asc: "Name (A-Z)",
         pantry_sort_name_desc: "Name (Z-A)",
         pantry_expires: "Expires",
-        pantry_empty_title: "Your Pantry is Empty",
+        pantry_empty_title: "Your Smart Kitchen is Empty",
         pantry_empty_desc: "Add items to your smart kitchen to keep track of your ingredients.",
-        pantry_modal_title: "Add to Pantry",
+        pantry_modal_title: "Add to Smart Kitchen",
         pantry_modal_name: "Item Name",
         pantry_modal_quantity: "Quantity",
         pantry_modal_expiry: "Expiry Date",
@@ -191,6 +205,11 @@ const translations = {
         details_regen_modal_aspect: "Aspect Ratio",
         details_regen_modal_premium_note: "Upgrade to Premium to unlock different aspect ratios.",
         details_regen_modal_generate: "Generate",
+        style_default: 'Default',
+        style_studio: 'Studio Quality',
+        style_rustic: 'Rustic',
+        style_minimalist: 'Minimalist',
+        style_top_down: 'Top-down',
 
         // Results Page
         results_back_to_search: "Back to Search",
@@ -204,24 +223,40 @@ const translations = {
         cooking_timer_title: "Timer",
         cooking_not_found: "Recipe not found.",
         cooking_go_home: "Go Home",
+        cooking_voice_soon: 'Voice commands coming soon!',
 
         // History Page
         history_back: "Back to Profile",
         history_title: "Generation History",
         history_empty_title: "No History Yet",
         history_empty_desc: "Your recipe generation history will appear here.",
+
+        // Errors
+        error_email_exists: "Email already exists.",
+        error_recipe_generation: "Failed to generate recipes. The AI's response might be unavailable or malformed. Please try again.",
+        error_image_generation: "Image generation failed.",
+        error_meal_plan_generation: "Failed to generate a meal plan. The AI's response might be unavailable or malformed. Please try again.",
+        error_translation: "Translation failed. Please try again.",
+        error_find_stores: "Could not find nearby stores. Please ensure location services are enabled.",
+        error_find_stores_generic: "An error occurred while searching for stores. Please try again.",
+        error_txid_required: "Transaction ID is required.",
+        error_geolocation_unsupported: "Geolocation is not supported by your browser.",
+        error_geolocation_unavailable: "Unable to retrieve your location. Please enable location services.",
     },
     bn: {
         // Nav
         nav_home: 'হোম',
+        nav_home_mobile: 'হোম',
         nav_meal_plan: 'খাবার পরিকল্পনা',
         nav_meal_plan_mobile: 'প্ল্যান',
         nav_pantry: 'স্মার্ট কিচেন',
-        nav_pantry_mobile: 'প্যান্ট্রি',
+        nav_pantry_mobile: 'কিচেন',
         nav_shopping_list: 'কেনাকাটার তালিকা',
         nav_shopping_list_mobile: 'তালিকা',
         nav_assistant: 'সহকারী',
+        nav_assistant_mobile: 'সহকারী',
         nav_profile: 'প্রোফাইল',
+        nav_profile_mobile: 'প্রোফাইল',
         
         // Home Page
         home_title: "আপনার রান্নাঘরে কি আছে?",
@@ -286,6 +321,15 @@ const translations = {
         admin_na: "প্রযোজ্য নয়",
         admin_requested: "অনুরোধ করা হয়েছে",
         admin_admin_tag: "(অ্যাডমিন)",
+        admin_premium_since: 'প্রিমিয়াম শুরুর তারিখ',
+        admin_premium_renews: 'নবায়নের তারিখ',
+        admin_payment_methods: 'পেমেন্ট পদ্ধতি',
+        admin_add_new_method: 'নতুন পদ্ধতি যোগ করুন',
+        admin_method_name: 'পদ্ধতির নাম',
+        admin_method_details: 'বিবরণ / নম্বর',
+        admin_add_method: 'পদ্ধতি যোগ করুন',
+        admin_delete_method: 'মুছে ফেলুন',
+        admin_current_methods: 'বর্তমান পদ্ধতি',
 
         // Profile & Premium
         subscription_status: 'সাবস্ক্রিপশন অবস্থা',
@@ -315,6 +359,8 @@ const translations = {
         payment_send_to: "অনুগ্রহ করে নিচের যেকোনো একটি নম্বরে পেমেন্ট পাঠান:",
         payment_bkash: "বিকাশ",
         payment_nagad: "নগদ",
+        premium_plan_price: "প্রিমিয়াম প্ল্যান: ১০০ টাকা / মাস",
+        payment_instruction_send_money: "নির্দেশনা: 'সেন্ড মানি' অপশন ব্যবহার করুন। 'ক্যাশ আউট' ব্যবহার করবেন না।",
 
         // Shopping Assistant
         find_stores: "সেরা দোকান খুঁজুন",
@@ -351,9 +397,9 @@ const translations = {
         pantry_sort_name_asc: "নাম (A-Z)",
         pantry_sort_name_desc: "নাম (Z-A)",
         pantry_expires: "মেয়াদ শেষ হবে",
-        pantry_empty_title: "আপনার প্যান্ট্রি খালি",
+        pantry_empty_title: "আপনার স্মার্ট কিচেন খালি",
         pantry_empty_desc: "আপনার উপাদান ট্র্যাক করতে আপনার স্মার্ট রান্নাঘরে আইটেম যোগ করুন।",
-        pantry_modal_title: "প্যান্ট্রিতে যোগ করুন",
+        pantry_modal_title: "স্মার্ট কিচেনে যোগ করুন",
         pantry_modal_name: "আইটেমের নাম",
         pantry_modal_quantity: "পরিমাণ",
         pantry_modal_expiry: "মেয়াদ শেষ হওয়ার তারিখ",
@@ -396,6 +442,11 @@ const translations = {
         details_regen_modal_aspect: "আনুমানিক অনুপাত",
         details_regen_modal_premium_note: "ভিন্ন আনুমানিক অনুপাত আনলক করতে প্রিমিয়ামে আপগ্রেড করুন।",
         details_regen_modal_generate: "তৈরি করুন",
+        style_default: 'ডিফল্ট',
+        style_studio: 'স্টুডিও কোয়ালিটি',
+        style_rustic: 'গ্রাম্য',
+        style_minimalist: ' минималист',
+        style_top_down: 'উপর-নিচ',
 
         // Results Page
         results_back_to_search: "অনুসন্ধানে ফিরে যান",
@@ -409,23 +460,39 @@ const translations = {
         cooking_timer_title: "টাইমার",
         cooking_not_found: "রেসিপি পাওয়া যায়নি।",
         cooking_go_home: "হোমে যান",
+        cooking_voice_soon: 'ভয়েস কমান্ড শীঘ্রই আসছে!',
 
         // History Page
         history_back: "প্রোফাইলে ফিরে যান",
         history_title: "জেনারেসন ইতিহাস",
         history_empty_title: "এখনও কোন ইতিহাস নেই",
         history_empty_desc: "আপনার রেসিপি তৈরির ইতিহাস এখানে দেখা যাবে।",
+        
+        // Errors
+        error_email_exists: "এই ইমেল ইতিমধ্যে বিদ্যমান।",
+        error_recipe_generation: "রেসিপি তৈরি করতে ব্যর্থ হয়েছে। AI এর প্রতিক্রিয়া अनुपलब्ध বা ত্রুটিপূর্ণ হতে পারে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        error_image_generation: "ছবি তৈরি করতে ব্যর্থ হয়েছে।",
+        error_meal_plan_generation: "খাবার পরিকল্পনা তৈরি করতে ব্যর্থ হয়েছে। AI এর প্রতিক্রিয়া अनुपलब्ध বা ত্রুটিপূর্ণ হতে পারে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        error_translation: "অনুবাদ ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        error_find_stores: "কাছাকাছি দোকান খুঁজে পাওয়া যায়নি। অনুগ্রহ করে অবস্থান পরিষেবা সক্রিয় করুন।",
+        error_find_stores_generic: "দোকান খোঁজার সময় একটি ত্রুটি ঘটেছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        error_txid_required: "লেনদেন আইডি প্রয়োজন।",
+        error_geolocation_unsupported: "আপনার ব্রাউজার জিওলোকেশন সমর্থন করে না।",
+        error_geolocation_unavailable: "আপনার অবস্থান পুনরুদ্ধার করা যাচ্ছে না। অনুগ্রহ করে অবস্থান পরিষেবা সক্রিয় করুন।",
     },
     es: {
         nav_home: 'Inicio',
+        nav_home_mobile: 'Inicio',
         nav_meal_plan: 'Plan de Comidas',
         nav_meal_plan_mobile: 'Plan',
         nav_pantry: 'Cocina Inteligente',
-        nav_pantry_mobile: 'Despensa',
+        nav_pantry_mobile: 'Cocina',
         nav_shopping_list: 'Lista de Compras',
         nav_shopping_list_mobile: 'Lista',
         nav_assistant: 'Asistente',
+        nav_assistant_mobile: 'Asistente',
         nav_profile: 'Perfil',
+        nav_profile_mobile: 'Perfil',
         home_title: "¿Qué hay en tu Cocina?",
         home_subtitle: "Introduce los ingredientes que tienes o busca por nombre. ¡Nuestra IA preparará deliciosas recetas para ti!",
         by_ingredients_tab: "Por Ingredientes",
@@ -523,19 +590,46 @@ const translations = {
         admin_na: "N/A",
         admin_requested: "Solicitado",
         admin_admin_tag: "(Admin)",
+        admin_premium_since: 'Premium Desde',
+        admin_premium_renews: 'Renueva El',
         shopping_list_uncategorized: "Sin Categoría",
         shopping_list_groceries: "Comestibles",
+        pantry_title: "Cocina Inteligente",
+        pantry_empty_title: "Tu Cocina Inteligente está vacía",
+        pantry_empty_desc: "Añade artículos a tu cocina inteligente para hacer un seguimiento de tus ingredientes.",
+        pantry_modal_title: "Añadir a la Cocina Inteligente",
+        premium_plan_price: "Plan Premium: 100 BDT / mes",
+        payment_instruction_send_money: "Instrucción: Utilice la opción 'Enviar Dinero'. No utilice 'Cash Out'.",
+        style_default: 'Predeterminado',
+        style_studio: 'Calidad de Estudio',
+        style_rustic: 'Rústico',
+        style_minimalist: 'Minimalista',
+        style_top_down: 'Desde Arriba',
+        cooking_voice_soon: '¡Los comandos de voz estarán disponibles pronto!',
+        error_email_exists: "El correo electrónico ya existe.",
+        error_recipe_generation: "Error al generar recetas. La respuesta de la IA puede no estar disponible o tener un formato incorrecto. Por favor, inténtelo de nuevo.",
+        error_image_generation: "Error en la generación de imágenes.",
+        error_meal_plan_generation: "Error al generar el plan de comidas. La respuesta de la IA puede no estar disponible o tener un formato incorrecto. Por favor, inténtelo de nuevo.",
+        error_translation: "Falló la traducción. Por favor, inténtelo de nuevo.",
+        error_find_stores: "No se pudieron encontrar tiendas cercanas. Por favor, asegúrese de que los servicios de ubicación estén habilitados.",
+        error_find_stores_generic: "Ocurrió un error al buscar tiendas. Por favor, inténtelo de nuevo.",
+        error_txid_required: "Se requiere el ID de la transacción.",
+        error_geolocation_unsupported: "La geolocalización no es compatible con su navegador.",
+        error_geolocation_unavailable: "No se puede recuperar su ubicación. Por favor, habilite los servicios de ubicación.",
     },
     fr: {
         nav_home: 'Accueil',
+        nav_home_mobile: 'Accueil',
         nav_meal_plan: 'Plan de Repas',
         nav_meal_plan_mobile: 'Plan',
         nav_pantry: 'Cuisine Intelligente',
-        nav_pantry_mobile: 'Garde-manger',
+        nav_pantry_mobile: 'Cuisine',
         nav_shopping_list: 'Liste de Courses',
         nav_shopping_list_mobile: 'Liste',
         nav_assistant: 'Assistant',
+        nav_assistant_mobile: 'Assistant',
         nav_profile: 'Profil',
+        nav_profile_mobile: 'Profil',
         home_title: "Qu'y a-t-il dans votre Cuisine ?",
         home_subtitle: "Entrez les ingrédients que vous avez, ou recherchez par nom. Notre IA vous concoctera de délicieuses recettes !",
         by_ingredients_tab: "Par Ingrédients",
@@ -635,17 +729,42 @@ const translations = {
         admin_admin_tag: "(Admin)",
         shopping_list_uncategorized: "Non classé",
         shopping_list_groceries: "Épicerie",
+        pantry_title: "Cuisine Intelligente",
+        pantry_empty_title: "Votre Cuisine Intelligente est vide",
+        pantry_empty_desc: "Ajoutez des articles à votre cuisine intelligente pour suivre vos ingrédients.",
+        pantry_modal_title: "Ajouter à la Cuisine Intelligente",
+        premium_plan_price: "Plan Premium : 100 BDT / mois",
+        payment_instruction_send_money: "Instruction : Utilisez l'option 'Envoyer de l'argent'. N'utilisez pas 'Retrait d'argent'.",
+        style_default: 'Défaut',
+        style_studio: 'Qualité Studio',
+        style_rustic: 'Rustique',
+        style_minimalist: 'Minimaliste',
+        style_top_down: 'Vue de Dessus',
+        cooking_voice_soon: 'Commandes vocales bientôt disponibles !',
+        error_email_exists: "L'adresse e-mail existe déjà.",
+        error_recipe_generation: "Échec de la génération de recettes. La réponse de l'IA est peut-être indisponible ou mal formatée. Veuillez réessayer.",
+        error_image_generation: "La génération d'image a échoué.",
+        error_meal_plan_generation: "Échec de la génération du plan de repas. La réponse de l'IA est peut-être indisponible ou mal formatée. Veuillez réessayer.",
+        error_translation: "La traduction a échoué. Veuillez réessayer.",
+        error_find_stores: "Impossible de trouver des magasins à proximité. Veuillez activer les services de localisation.",
+        error_find_stores_generic: "Une erreur s'est produite lors de la recherche de magasins. Veuillez réessayer.",
+        error_txid_required: "L'ID de transaction est requis.",
+        error_geolocation_unsupported: "La géolocalisation n'est pas prise en charge par votre navigateur.",
+        error_geolocation_unavailable: "Impossible de récupérer votre position. Veuillez activer les services de localisation.",
     },
     ja: {
         nav_home: 'ホーム',
+        nav_home_mobile: 'ホーム',
         nav_meal_plan: '食事プラン',
         nav_meal_plan_mobile: 'プラン',
         nav_pantry: 'スマートキッチン',
-        nav_pantry_mobile: 'パントリー',
+        nav_pantry_mobile: 'キッチン',
         nav_shopping_list: '買い物リスト',
         nav_shopping_list_mobile: 'リスト',
         nav_assistant: 'アシスタント',
+        nav_assistant_mobile: 'アシスタント',
         nav_profile: 'プロフィール',
+        nav_profile_mobile: 'プロフィール',
         home_title: "キッチンには何がありますか？",
         home_subtitle: "持っている食材を入力するか、名前で検索してください。AIが美味しいレシピを提案します！",
         by_ingredients_tab: "食材で検索",
@@ -745,111 +864,280 @@ const translations = {
         admin_admin_tag: "（管理者）",
         shopping_list_uncategorized: "未分類",
         shopping_list_groceries: "食料品",
+        pantry_title: "スマートキッチン",
+        pantry_empty_title: "スマートキッチンは空です",
+        pantry_empty_desc: "スマートキッチンにアイテムを追加して、食材を管理しましょう。",
+        pantry_modal_title: "スマートキッチンに追加",
+        premium_plan_price: "プレミアムプラン：100 BDT / 月",
+        payment_instruction_send_money: "手順：「送金」オプションを使用してください。「現金引き出し」は使用しないでください。",
+        style_default: 'デフォルト',
+        style_studio: 'スタジオ品質',
+        style_rustic: 'ラスティック',
+        style_minimalist: 'ミニマリスト',
+        style_top_down: 'トップダウン',
+        cooking_voice_soon: '音声コマンドは近日公開予定です！',
+        error_email_exists: "メールアドレスはすでに存在します。",
+        error_recipe_generation: "レシピの生成に失敗しました。AIの応答が利用できないか、形式が正しくない可能性があります。もう一度お試しください。",
+        error_image_generation: "画像の生成に失敗しました。",
+        error_meal_plan_generation: "食事プランの生成に失敗しました。AIの応答が利用できないか、形式が正しくない可能性があります。もう一度お試しください。",
+        error_translation: "翻訳に失敗しました。もう一度お試しください。",
+        error_find_stores: "近くの店舗が見つかりませんでした。位置情報サービスが有効になっていることを確認してください。",
+        error_find_stores_generic: "店舗の検索中にエラーが発生しました。もう一度お試しください。",
+        error_txid_required: "取引IDが必要です。",
+        error_geolocation_unsupported: "お使いのブラウザは位置情報をサポートしていません。",
+        error_geolocation_unavailable: "位置情報を取得できません。位置情報サービスを有効にしてください。",
     },
     de: {
         nav_home: "Startseite",
+        nav_home_mobile: 'Start',
         nav_meal_plan: "Speiseplan",
         nav_meal_plan_mobile: "Plan",
         nav_pantry: "Smarte Küche",
-        nav_pantry_mobile: "Vorratskammer",
+        nav_pantry_mobile: "Küche",
         nav_shopping_list: "Einkaufsliste",
         nav_shopping_list_mobile: "Liste",
         nav_assistant: "Assistent",
+        nav_assistant_mobile: 'Assistent',
         nav_profile: "Profil",
+        nav_profile_mobile: 'Profil',
         home_title: "Was ist in Ihrer Küche?",
         home_subtitle: "Geben Sie Zutaten ein, die Sie haben, oder suchen Sie nach Namen. Unsere KI wird köstliche Rezepte für Sie zaubern!",
         generate_recipes: "Rezepte generieren",
         recipes: 'Rezepte',
+        premium_plan_price: "Premium Plan: 100 BDT / month",
+        payment_instruction_send_money: "Instruction: Use the 'Send Money' option. Do not use 'Cash Out'.",
+        style_default: 'Standard',
+        style_studio: 'Studioqualität',
+        style_rustic: 'Rustikal',
+        style_minimalist: 'Minimalistisch',
+        style_top_down: 'Von Oben',
+        cooking_voice_soon: 'Sprachbefehle in Kürze verfügbar!',
+        error_email_exists: 'E-Mail existiert bereits.',
+        error_recipe_generation: 'Generierung von Rezepten fehlgeschlagen. Die Antwort der KI ist möglicherweise nicht verfügbar oder fehlerhaft. Bitte versuchen Sie es erneut.',
+        error_image_generation: 'Bilderzeugung fehlgeschlagen.',
+        error_meal_plan_generation: 'Erstellung des Speiseplans fehlgeschlagen. Die Antwort der KI ist möglicherweise nicht verfügbar oder fehlerhaft. Bitte versuchen Sie es erneut.',
+        error_translation: 'Übersetzung fehlgeschlagen. Bitte versuchen Sie es erneut.',
+        error_find_stores: 'Keine Geschäfte in der Nähe gefunden. Bitte stellen Sie sicher, dass die Ortungsdienste aktiviert sind.',
+        error_find_stores_generic: 'Bei der Suche nach Geschäften ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.',
+        error_txid_required: 'Transaktions-ID ist erforderlich.',
+        error_geolocation_unsupported: 'Geolokalisierung wird von Ihrem Browser nicht unterstützt.',
+        error_geolocation_unavailable: 'Ihr Standort konnte nicht abgerufen werden. Bitte aktivieren Sie die Ortungsdienste.',
     },
     it: {
         nav_home: "Home",
+        nav_home_mobile: 'Home',
         nav_meal_plan: "Piano Pasti",
         nav_meal_plan_mobile: "Piano",
         nav_pantry: "Cucina Intelligente",
-        nav_pantry_mobile: "Dispensa",
+        nav_pantry_mobile: "Cucina",
         nav_shopping_list: "Lista Spesa",
         nav_shopping_list_mobile: "Lista",
         nav_assistant: "Assistente",
+        nav_assistant_mobile: 'Assistente',
         nav_profile: "Profilo",
+        nav_profile_mobile: 'Profilo',
         home_title: "Cosa c'è nella tua cucina?",
         home_subtitle: "Inserisci gli ingredienti che hai o cerca per nome. La nostra IA preparerà ricette deliziose per te!",
         generate_recipes: "Genera Ricette",
         recipes: 'Ricette',
+        premium_plan_price: "Premium Plan: 100 BDT / month",
+        payment_instruction_send_money: "Instruction: Use the 'Send Money' option. Do not use 'Cash Out'.",
+        style_default: 'Predefinito',
+        style_studio: 'Qualità da studio',
+        style_rustic: 'Rustico',
+        style_minimalist: 'Minimalista',
+        style_top_down: 'Dall\'alto',
+        cooking_voice_soon: 'Comandi vocali in arrivo!',
+        error_email_exists: 'Email già esistente.',
+        error_recipe_generation: 'Generazione delle ricette non riuscita. La risposta dell\'IA potrebbe non essere disponibile o malformata. Riprova.',
+        error_image_generation: 'Generazione dell\'immagine non riuscita.',
+        error_meal_plan_generation: 'Generazione del piano alimentare non riuscita. La risposta dell\'IA potrebbe non essere disponibile o malformata. Riprova.',
+        error_translation: 'Traduzione non riuscita. Riprova.',
+        error_find_stores: 'Impossibile trovare negozi nelle vicinanze. Assicurati che i servizi di localizzazione siano abilitati.',
+        error_find_stores_generic: 'Si è verificato un errore durante la ricerca di negozi. Riprova.',
+        error_txid_required: 'ID transazione richiesto.',
+        error_geolocation_unsupported: 'La geolocalizzazione non è supportata dal tuo browser.',
+        error_geolocation_unavailable: 'Impossibile recuperare la tua posizione. Abilita i servizi di localizzazione.',
     },
     pt: {
         nav_home: "Início",
+        nav_home_mobile: 'Início',
         nav_meal_plan: "Plano de Refeições",
         nav_meal_plan_mobile: "Plano",
         nav_pantry: "Cozinha Inteligente",
-        nav_pantry_mobile: "Despensa",
+        nav_pantry_mobile: "Cozinha",
         nav_shopping_list: "Lista de Compras",
         nav_shopping_list_mobile: "Lista",
         nav_assistant: "Assistente",
+        nav_assistant_mobile: 'Assistente',
         nav_profile: "Perfil",
+        nav_profile_mobile: 'Perfil',
         home_title: "O que há na sua cozinha?",
         home_subtitle: "Digite os ingredientes que você tem ou pesquise por nome. Nossa IA irá preparar receitas deliciosas para você!",
         generate_recipes: "Gerar Receitas",
         recipes: 'Receitas',
+        premium_plan_price: "Premium Plan: 100 BDT / month",
+        payment_instruction_send_money: "Instruction: Use the 'Send Money' option. Do not use 'Cash Out'.",
+        style_default: 'Padrão',
+        style_studio: 'Qualidade de Estúdio',
+        style_rustic: 'Rústico',
+        style_minimalist: 'Minimalista',
+        style_top_down: 'De Cima',
+        cooking_voice_soon: 'Comandos de voz em breve!',
+        error_email_exists: 'O email já existe.',
+        error_recipe_generation: 'Falha ao gerar receitas. A resposta da IA pode estar indisponível ou malformada. Por favor, tente novamente.',
+        error_image_generation: 'Falha na geração de imagem.',
+        error_meal_plan_generation: 'Falha ao gerar o plano de refeições. A resposta da IA pode estar indisponível ou malformada. Por favor, tente novamente.',
+        error_translation: 'A tradução falhou. Por favor, tente novamente.',
+        error_find_stores: 'Não foi possível encontrar lojas próximas. Verifique se os serviços de localização estão ativados.',
+        error_find_stores_generic: 'Ocorreu um erro ao procurar lojas. Por favor, tente novamente.',
+        error_txid_required: 'O ID da transação é obrigatório.',
+        error_geolocation_unsupported: 'A geolocalização não é suportada pelo seu navegador.',
+        error_geolocation_unavailable: 'Não é possível recuperar a sua localização. Por favor, ative os serviços de localização.',
     },
     ko: {
         nav_home: "홈",
+        nav_home_mobile: '홈',
         nav_meal_plan: "식단 계획",
         nav_meal_plan_mobile: "계획",
         nav_pantry: "스마트 키친",
-        nav_pantry_mobile: "식료품 저장실",
+        nav_pantry_mobile: "주방",
         nav_shopping_list: "쇼핑 목록",
         nav_shopping_list_mobile: "목록",
         nav_assistant: "어시스턴트",
+        nav_assistant_mobile: '어시스턴트',
         nav_profile: "프로필",
+        nav_profile_mobile: '프로필',
         home_title: "주방에 무엇이 있나요?",
         home_subtitle: "가지고 있는 재료를 입력하거나 이름으로 검색하세요. 저희 AI가 맛있는 레시피를 만들어 드립니다!",
         generate_recipes: "레시피 생성",
         recipes: '레시피',
+        premium_plan_price: "Premium Plan: 100 BDT / month",
+        payment_instruction_send_money: "Instruction: Use the 'Send Money' option. Do not use 'Cash Out'.",
+        style_default: '기본',
+        style_studio: '스튜디오 품질',
+        style_rustic: '소박한',
+        style_minimalist: '미니멀리스트',
+        style_top_down: '탑다운',
+        cooking_voice_soon: '음성 명령이 곧 제공될 예정입니다!',
+        error_email_exists: '이메일이 이미 존재합니다.',
+        error_recipe_generation: '레시피 생성에 실패했습니다. AI의 응답을 사용할 수 없거나 형식이 잘못되었을 수 있습니다. 다시 시도해 주세요.',
+        error_image_generation: '이미지 생성에 실패했습니다.',
+        error_meal_plan_generation: '식단 계획 생성에 실패했습니다. AI의 응답을 사용할 수 없거나 형식이 잘못되었을 수 있습니다. 다시 시도해 주세요.',
+        error_translation: '번역에 실패했습니다. 다시 시도해 주세요.',
+        error_find_stores: '주변 상점을 찾을 수 없습니다. 위치 서비스가 활성화되어 있는지 확인하십시오.',
+        error_find_stores_generic: '상점을 검색하는 동안 오류가 발생했습니다. 다시 시도해 주세요.',
+        error_txid_required: '거래 ID가 필요합니다.',
+        error_geolocation_unsupported: '브라우저에서 위치 정보가 지원되지 않습니다.',
+        error_geolocation_unavailable: '위치를 가져올 수 없습니다. 위치 서비스를 활성화하십시오.',
     },
     zh: {
         nav_home: "首页",
+        nav_home_mobile: '首页',
         nav_meal_plan: "膳食计划",
         nav_meal_plan_mobile: "计划",
         nav_pantry: "智能厨房",
-        nav_pantry_mobile: "食品柜",
+        nav_pantry_mobile: "厨房",
         nav_shopping_list: "购物清单",
         nav_shopping_list_mobile: "清单",
         nav_assistant: "助手",
+        nav_assistant_mobile: '助手',
         nav_profile: "个人资料",
+        nav_profile_mobile: '资料',
         home_title: "你的厨房里有什么？",
         home_subtitle: "输入您拥有的食材，或按名称搜索。我们的AI将为您制作美味的食谱！",
         generate_recipes: "生成食谱",
         recipes: '食谱',
+        premium_plan_price: "Premium Plan: 100 BDT / month",
+        payment_instruction_send_money: "Instruction: Use the 'Send Money' option. Do not use 'Cash Out'.",
+        style_default: '默认',
+        style_studio: '影棚品质',
+        style_rustic: '乡村风格',
+        style_minimalist: '极简主义',
+        style_top_down: '俯视',
+        cooking_voice_soon: '语音命令即将推出！',
+        error_email_exists: '电子邮件已存在。',
+        error_recipe_generation: '生成食谱失败。AI的响应可能不可用或格式错误。请重试。',
+        error_image_generation: '图片生成失败。',
+        error_meal_plan_generation: '生成膳食计划失败。AI的响应可能不可用或格式错误。请重试。',
+        error_translation: '翻译失败。请重试。',
+        error_find_stores: '找不到附近的商店。请确保已启用定位服务。',
+        error_find_stores_generic: '搜索商店时出错。请重试。',
+        error_txid_required: '交易ID是必需的。',
+        error_geolocation_unsupported: '您的浏览器不支持地理位置。',
+        error_geolocation_unavailable: '无法获取您的位置。请启用定位服务。',
     },
     hi: {
         nav_home: "होम",
+        nav_home_mobile: 'होम',
         nav_meal_plan: "भोजन योजना",
         nav_meal_plan_mobile: "योजना",
         nav_pantry: "स्मार्ट किचन",
-        nav_pantry_mobile: "पेंट्री",
+        nav_pantry_mobile: "किचन",
         nav_shopping_list: "खरीदारी की सूची",
         nav_shopping_list_mobile: "सूची",
         nav_assistant: "सहायक",
+        nav_assistant_mobile: 'सहायक',
         nav_profile: "प्रोफ़ाइल",
+        nav_profile_mobile: 'प्रोफ़ाइल',
         home_title: "आपकी रसोई में क्या है?",
         home_subtitle: "आपके पास मौजूद सामग्री दर्ज करें, या नाम से खोजें। हमारा AI आपके लिए स्वादिष्ट व्यंजन तैयार करेगा!",
         generate_recipes: "व्यंजन बनाएं",
         recipes: 'व्यंजन',
+        premium_plan_price: "Premium Plan: 100 BDT / month",
+        payment_instruction_send_money: "Instruction: Use the 'Send Money' option. Do not use 'Cash Out'.",
+        style_default: 'डिफ़ॉल्ट',
+        style_studio: 'स्टूडियो गुणवत्ता',
+        style_rustic: 'ग्राम्य',
+        style_minimalist: 'न्यूनतम',
+        style_top_down: 'ऊपर से नीचे',
+        cooking_voice_soon: 'आवाज आदेश जल्द ही आ रहे हैं!',
+        error_email_exists: 'ईमेल पहले से मौजूद है।',
+        error_recipe_generation: 'व्यंजन बनाने में विफल। AI की प्रतिक्रिया अनुपलब्ध या विकृत हो सकती है। कृपया पुनः प्रयास करें।',
+        error_image_generation: 'छवि बनाने में विफल।',
+        error_meal_plan_generation: 'भोजन योजना बनाने में विफल। AI की प्रतिक्रिया अनुपलब्ध या विकृत हो सकती है। कृपया पुनः प्रयास करें।',
+        error_translation: 'अनुवाद विफल। कृपया पुनः प्रयास करें।',
+        error_find_stores: 'आस-पास कोई दुकान नहीं मिली। कृपया सुनिश्चित करें कि स्थान सेवाएँ सक्षम हैं।',
+        error_find_stores_generic: 'दुकानों की खोज करते समय एक त्रुटि हुई। कृपया पुनः प्रयास करें।',
+        error_txid_required: 'लेन-देन आईडी आवश्यक है।',
+        error_geolocation_unsupported: 'आपका ब्राउज़र जियोलोकेशन का समर्थन नहीं करता है।',
+        error_geolocation_unavailable: 'आपका स्थान पुनर्प्राप्त करने में असमर्थ। कृपया स्थान सेवाएँ सक्षम करें।',
     },
     ar: {
         nav_home: "الرئيسية",
+        nav_home_mobile: 'الرئيسية',
         nav_meal_plan: "خطة الوجبات",
         nav_meal_plan_mobile: "خطة",
         nav_pantry: "مطبخ ذكي",
-        nav_pantry_mobile: "خزانة",
+        nav_pantry_mobile: "مطبخ",
         nav_shopping_list: "قائمة التسوق",
         nav_shopping_list_mobile: "قائمة",
         nav_assistant: "مساعد",
+        nav_assistant_mobile: 'مساعد',
         nav_profile: "الملف الشخصي",
+        nav_profile_mobile: 'ملفي',
         home_title: "ماذا يوجد في مطبخك؟",
         home_subtitle: "أدخل المكونات التي لديك، أو ابحث بالاسم. سيقوم الذكاء الاصطناعي لدينا بإعداد وصفات لذيذة لك!",
         generate_recipes: "إنشاء وصفات",
         recipes: 'وصفات',
+        premium_plan_price: "Premium Plan: 100 BDT / month",
+        payment_instruction_send_money: "Instruction: Use the 'Send Money' option. Do not use 'Cash Out'.",
+        style_default: 'افتراضي',
+        style_studio: 'جودة استوديو',
+        style_rustic: 'ريفي',
+        style_minimalist: 'بسيط',
+        style_top_down: 'من الأعلى',
+        cooking_voice_soon: 'الأوامر الصوتية قريبا!',
+        error_email_exists: 'البريد الإلكتروني موجود بالفعل.',
+        error_recipe_generation: 'فشل في إنشاء الوصفات. قد يكون رد الذكاء الاصطناعي غير متوفر أو مشوه. يرجى المحاولة مرة أخرى.',
+        error_image_generation: 'فشل في إنشاء الصورة.',
+        error_meal_plan_generation: 'فشل في إنشاء خطة الوجبات. قد يكون رد الذكاء الاصطناعي غير متوفر أو مشوه. يرجى المحاولة مرة أخرى.',
+        error_translation: 'فشلت الترجمة. يرجى المحاولة مرة أخرى.',
+        error_find_stores: 'تعذر العثور على متاجر قريبة. يرجى التأكد من تمكين خدمات الموقع.',
+        error_find_stores_generic: 'حدث خطأ أثناء البحث عن المتاجر. يرجى المحاولة مرة أخرى.',
+        error_txid_required: 'معرف المعاملة مطلوب.',
+        error_geolocation_unsupported: 'متصفحك لا يدعم تحديد الموقع الجغرافي.',
+        error_geolocation_unavailable: 'غير قادر على استرداد موقعك. يرجى تمكين خدمات الموقع.',
     }
 };
 
@@ -882,6 +1170,7 @@ export const AppProvider = ({ children }) => {
     const [allUsers, setAllUsers] = useState<UserProfile[]>([]);
     const [isInitialLoading, setIsInitialLoading] = useState(true);
     const [language, setLanguage] = useLocalStorage<Language>('language', 'en');
+    const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('theme', 'light');
     
     const [generatedRecipes, setGeneratedRecipes] = useState<Recipe[]>([]);
     const [history, setHistory] = useState<HistoryItem[]>([]);
@@ -890,13 +1179,29 @@ export const AppProvider = ({ children }) => {
     const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
     
     const [pendingPayments, setPendingPayments] = useState<PendingPayment[]>([]);
+    const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
     
     const [globalTimer, setGlobalTimer] = useState<TimerState>({ isActive: false, isPaused: false, remainingSeconds: 0, recipeId: null, recipeTitle: null });
 
+    useEffect(() => {
+        const root = window.document.documentElement;
+        root.classList.remove('light', 'dark');
+        root.classList.add(theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    };
+    
     const user = useMemo(() => {
         if (!currentUser) return null;
         return allUsers.find(u => u.id === currentUser.id) || null;
     }, [currentUser, allUsers]);
+
+    const t = useMemo(() => (key: string): string => {
+        const langPart = translations[language] || translations.en;
+        return langPart[key] || translations.en[key] || key;
+    }, [language]);
 
     useEffect(() => {
         const bootstrapApp = async () => {
@@ -904,6 +1209,9 @@ export const AppProvider = ({ children }) => {
             
             const allUsersFromApi = await api.apiGetAllUsers();
             setAllUsers(allUsersFromApi);
+            
+            const allPaymentMethods = await api.apiGetPaymentMethods();
+            setPaymentMethods(allPaymentMethods);
 
             let sessionUser = null;
             try {
@@ -978,7 +1286,7 @@ export const AppProvider = ({ children }) => {
             toast.success("Account created successfully!");
             return true;
         }
-        toast.error(result.message);
+        toast.error(t(result.message));
         return false;
     };
 
@@ -1110,10 +1418,17 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-    const t = useMemo(() => (key: string): string => {
-        const langPart = translations[language] || translations.en;
-        return langPart[key] || translations.en[key] || key;
-    }, [language]);
+    const addPaymentMethod = async (method: Omit<PaymentMethod, 'id'>) => {
+        const updatedMethods = await api.apiAddPaymentMethod(method);
+        setPaymentMethods(updatedMethods);
+        toast.success("Payment method added.");
+    };
+
+    const deletePaymentMethod = async (methodId: string) => {
+        const updatedMethods = await api.apiDeletePaymentMethod(methodId);
+        setPaymentMethods(updatedMethods);
+        toast.info("Payment method removed.");
+    };
     
     useEffect(() => {
         let interval: number;
@@ -1136,6 +1451,7 @@ export const AppProvider = ({ children }) => {
     const value: AppContextType = useMemo(() => ({
         user, isInitialLoading, signInUser, signUpUser, signOutUser,
         language, setLanguage, t,
+        theme, toggleTheme,
         generatedRecipes, setGeneratedRecipes,
         history, addToHistory,
         shoppingList, addToShoppingList, updateShoppingListItem, removeShoppingListItem, toggleAllShoppingListItems,
@@ -1148,8 +1464,11 @@ export const AppProvider = ({ children }) => {
         rejectPayment,
         allUsers,
         updateUserSubscriptionStatusByAdmin,
+        paymentMethods,
+        addPaymentMethod,
+        deletePaymentMethod,
     }), [
-        user, isInitialLoading, language, generatedRecipes, history, shoppingList, pantry, savedRecipes, globalTimer, pendingPayments, allUsers,
+        user, isInitialLoading, language, theme, generatedRecipes, history, shoppingList, pantry, savedRecipes, globalTimer, pendingPayments, allUsers, t, paymentMethods,
         addToHistory, addToShoppingList, updateShoppingListItem, removeShoppingListItem, toggleAllShoppingListItems,
         addToPantry, updatePantryItem, removePantryItem, toggleSaveRecipe, signInUser, signUpUser, signOutUser
     ]);

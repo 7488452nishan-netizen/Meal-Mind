@@ -15,8 +15,8 @@ import ShoppingList from './pages/ShoppingList';
 import ShoppingAssistant from './pages/ShoppingAssistant';
 import AdminPanel from './pages/AdminPanel';
 
-// FIX: Added explicit type for children prop to resolve TS errors.
-const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
+// FIX: Switched to explicitly typing props to resolve issues with React.FC and children.
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isInitialLoading } = useContext(AppContext);
   const location = useLocation();
 
@@ -31,11 +31,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
-  return children;
+  return <>{children}</>;
 };
 
-// FIX: Added explicit type for children prop to resolve TS errors.
-const AdminRoute = ({ children }: { children: React.ReactElement }) => {
+// FIX: Switched to explicitly typing props to resolve issues with React.FC and children.
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
     const { user, isInitialLoading } = useContext(AppContext);
     const location = useLocation();
 
@@ -51,7 +51,7 @@ const AdminRoute = ({ children }: { children: React.ReactElement }) => {
         return <Navigate to="/" replace />;
     }
 
-    return children;
+    return <>{children}</>;
 };
 
 function App() {

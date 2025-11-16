@@ -68,10 +68,10 @@ const Ads = ({ type, onFinish = () => {} }) => {
     if (type === 'thumbnail') {
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-items-center">
-                <div className="bg-muted rounded-lg flex justify-center items-center overflow-hidden w-[300px] h-[250px]">
+                <div className="bg-muted dark:bg-stone-800 rounded-lg flex justify-center items-center overflow-hidden w-[300px] h-[250px]">
                     <AdUnit adKey="22ed30d900f3568b69f221aad654f51c" height={250} width={300} />
                 </div>
-                <div className="bg-muted rounded-lg flex justify-center items-center overflow-hidden w-[320px] h-[50px]">
+                <div className="bg-muted dark:bg-stone-800 rounded-lg flex justify-center items-center overflow-hidden w-[320px] h-[50px]">
                      <AdUnit adKey="12b5db87617ab6ae7381b7ea99e872e3" height={50} width={320} />
                 </div>
             </div>

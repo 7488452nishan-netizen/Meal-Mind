@@ -19,13 +19,13 @@ const History = () => {
                 <h1 className="text-3xl font-bold font-display">{t('history_title')}</h1>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-card border border-border overflow-hidden">
+            <div className="bg-white dark:bg-stone-900 rounded-2xl shadow-card border border-border dark:border-stone-800 overflow-hidden">
                 {history.length > 0 ? (
-                    <ul className="divide-y divide-border">
+                    <ul className="divide-y divide-border dark:divide-stone-700">
                         {history.map(item => (
                             <li key={item.id} className="p-5">
-                                <p className="font-semibold text-foreground truncate">{item.query}</p>
-                                <div className="flex justify-between text-sm text-muted-foreground mt-1">
+                                <p className="font-semibold text-foreground dark:text-stone-100 truncate">{item.query}</p>
+                                <div className="flex justify-between text-sm text-muted-foreground dark:text-stone-400 mt-1">
                                     <span>{new Date(item.timestamp).toLocaleString()}</span>
                                     <span>{item.recipeCount} {t('recipes')}</span>
                                 </div>
@@ -34,9 +34,9 @@ const History = () => {
                     </ul>
                 ) : (
                     <div className="text-center py-16 px-6">
-                        <HistoryIcon className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                        <h3 className="text-xl font-bold font-display text-foreground">{t('history_empty_title')}</h3>
-                        <p className="text-muted-foreground mt-2">{t('history_empty_desc')}</p>
+                        <HistoryIcon className="w-12 h-12 mx-auto text-muted-foreground dark:text-stone-500 mb-4" />
+                        <h3 className="text-xl font-bold font-display text-foreground dark:text-stone-100">{t('history_empty_title')}</h3>
+                        <p className="text-muted-foreground dark:text-stone-400 mt-2">{t('history_empty_desc')}</p>
                     </div>
                 )}
             </div>

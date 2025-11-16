@@ -79,6 +79,12 @@ export interface PendingPayment {
   timestamp: string;
 }
 
+export interface PaymentMethod {
+  id: string;
+  name: string;
+  details: string; // e.g., account number, instructions
+}
+
 export interface AppContextType {
   user: UserProfile | null;
   isInitialLoading: boolean;
@@ -114,6 +120,11 @@ export interface AppContextType {
   rejectPayment: (paymentId: string) => void;
   allUsers: UserProfile[];
   updateUserSubscriptionStatusByAdmin: (userId: string, newStatus: UserProfile['subscriptionStatus']) => void;
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+  paymentMethods: PaymentMethod[];
+  addPaymentMethod: (method: Omit<PaymentMethod, 'id'>) => Promise<void>;
+  deletePaymentMethod: (methodId: string) => Promise<void>;
 }
 
 export interface TimerState {

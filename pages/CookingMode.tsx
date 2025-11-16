@@ -77,7 +77,7 @@ const CookingMode = () => {
                 <button onClick={prevStep} disabled={currentStep === 0} className="p-4 bg-white/20 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/30 transition">
                     <ChevronLeft className="w-8 h-8" />
                 </button>
-                <div className="p-5 bg-primary rounded-full cursor-not-allowed opacity-50" title="Voice commands coming soon!">
+                <div className="p-5 bg-primary rounded-full cursor-not-allowed opacity-50" title={t('cooking_voice_soon')}>
                     <Mic className="w-10 h-10" />
                 </div>
                 <button onClick={nextStep} disabled={currentStep === recipe.instructions.length - 1} className="p-4 bg-white/20 rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/30 transition">

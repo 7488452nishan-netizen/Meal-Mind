@@ -73,11 +73,6 @@
       .hide-scrollbar::-webkit-scrollbar { display: none; }
       .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-      input::placeholder, textarea::placeholder {
-        background-color: #e0f2f1; /* A light green color */
-        color: #16A34A; /* Primary color */
-        opacity: 0.6;
-      }
     </style>
   <script type="importmap">
 {
@@ -93,7 +88,7 @@
 }
 </script>
 </head>
-  <body class="min-h-screen text-foreground antialiased bg-background selection:bg-primary/20 selection:text-primary-dark">
+  <body class="min-h-screen text-foreground dark:text-stone-100 antialiased bg-background dark:bg-dark selection:bg-primary/20 selection:text-primary-dark">
     <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
   </body>

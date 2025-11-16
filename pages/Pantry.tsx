@@ -66,9 +66,9 @@ const Pantry = () => {
         const diffTime = expiryDate.getTime() - today.getTime();
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        if (diffDays < 0) return 'text-red-600 bg-red-100';
-        if (diffDays <= 7) return 'text-amber-600 bg-amber-100';
-        return 'text-green-600 bg-green-100';
+        if (diffDays < 0) return 'text-red-600 dark:text-red-300 bg-red-100 dark:bg-red-900/50';
+        if (diffDays <= 7) return 'text-amber-600 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/50';
+        return 'text-green-600 dark:text-green-300 bg-green-100 dark:bg-green-900/50';
     };
     
     return (
@@ -78,17 +78,17 @@ const Pantry = () => {
                     <ShoppingBasket className="w-8 h-8 text-primary" />
                     <h1 className="text-3xl font-bold font-display">{t('pantry_title')}</h1>
                 </div>
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center justify-end flex-wrap gap-4">
                     <div className="relative" ref={sortRef}>
-                        <button onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)} className="flex items-center space-x-2 bg-white border border-border px-4 py-2.5 rounded-lg shadow-sm hover:bg-muted transition">
-                            <ArrowDownUp className="w-4 h-4 text-muted-foreground" />
-                            <span className="font-semibold text-foreground">{t('pantry_sort')}</span>
+                        <button onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)} className="flex items-center space-x-2 bg-white dark:bg-stone-900 border border-border dark:border-stone-700 px-4 py-2.5 rounded-lg shadow-sm hover:bg-muted dark:hover:bg-stone-800 transition">
+                            <ArrowDownUp className="w-4 h-4 text-muted-foreground dark:text-stone-400" />
+                            <span className="font-semibold text-foreground dark:text-stone-100">{t('pantry_sort')}</span>
                         </button>
                         {isSortDropdownOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg z-10 animate-scaleIn origin-top-right border border-border">
-                                <button onClick={() => { setSortOrder('expiryDate'); setIsSortDropdownOpen(false); }} className={`w-full text-left px-4 py-2 ${sortOrder === 'expiryDate' ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}>{t('pantry_sort_expiry')}</button>
-                                <button onClick={() => { setSortOrder('name-asc'); setIsSortDropdownOpen(false); }} className={`w-full text-left px-4 py-2 ${sortOrder === 'name-asc' ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}>{t('pantry_sort_name_asc')}</button>
-                                <button onClick={() => { setSortOrder('name-desc'); setIsSortDropdownOpen(false); }} className={`w-full text-left px-4 py-2 ${sortOrder === 'name-desc' ? 'bg-primary/10 text-primary' : 'hover:bg-muted'}`}>{t('pantry_sort_name_desc')}</button>
+                            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-stone-900 rounded-xl shadow-lg z-10 animate-scaleIn origin-top-right border border-border dark:border-stone-700">
+                                <button onClick={() => { setSortOrder('expiryDate'); setIsSortDropdownOpen(false); }} className={`w-full text-left px-4 py-2 ${sortOrder === 'expiryDate' ? 'bg-primary/10 text-primary' : 'hover:bg-muted dark:hover:bg-stone-800'}`}>{t('pantry_sort_expiry')}</button>
+                                <button onClick={() => { setSortOrder('name-asc'); setIsSortDropdownOpen(false); }} className={`w-full text-left px-4 py-2 ${sortOrder === 'name-asc' ? 'bg-primary/10 text-primary' : 'hover:bg-muted dark:hover:bg-stone-800'}`}>{t('pantry_sort_name_asc')}</button>
+                                <button onClick={() => { setSortOrder('name-desc'); setIsSortDropdownOpen(false); }} className={`w-full text-left px-4 py-2 ${sortOrder === 'name-desc' ? 'bg-primary/10 text-primary' : 'hover:bg-muted dark:hover:bg-stone-800'}`}>{t('pantry_sort_name_desc')}</button>
                             </div>
                         )}
                     </div>
@@ -102,14 +102,14 @@ const Pantry = () => {
             {sortedPantry.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {sortedPantry.map(item => (
-                        <div key={item.id} className="bg-white rounded-2xl shadow-card border border-border p-5 flex flex-col space-y-3">
+                        <div key={item.id} className="bg-white dark:bg-stone-900 rounded-2xl shadow-card border border-border dark:border-stone-800 p-5 flex flex-col space-y-3">
                             <div className="flex justify-between items-start">
-                                <h3 className="font-bold font-display text-lg text-foreground pr-2 flex-1">{item.name}</h3>
-                                <button onClick={() => removePantryItem(item.id)} className="text-muted-foreground hover:text-red-500 transition shrink-0 p-1">
+                                <h3 className="font-bold font-display text-lg text-foreground dark:text-stone-100 pr-2 flex-1">{item.name}</h3>
+                                <button onClick={() => removePantryItem(item.id)} className="text-muted-foreground dark:text-stone-400 hover:text-red-500 transition shrink-0 p-1">
                                     <Trash2 className="w-4 h-4" />
                                 </button>
                             </div>
-                            <div className="flex items-center text-muted-foreground">
+                            <div className="flex items-center text-muted-foreground dark:text-stone-400">
                                 {editingItemId === item.id ? (
                                     <div className="flex items-center space-x-2">
                                         <input
@@ -118,7 +118,7 @@ const Pantry = () => {
                                             onChange={(e) => setEditingValue(e.target.value)}
                                             onBlur={() => handleQuantityUpdate(item.id, editingValue)}
                                             onKeyDown={(e) => e.key === 'Enter' && handleQuantityUpdate(item.id, editingValue)}
-                                            className="w-24 p-1 border rounded"
+                                            className="w-24 p-1 border rounded dark:bg-stone-700 dark:border-stone-600"
                                             autoFocus
                                         />
                                         <button onClick={() => handleQuantityUpdate(item.id, editingValue)} className="p-1">
@@ -134,7 +134,7 @@ const Pantry = () => {
                                     </div>
                                 )}
                             </div>
-                            {item.notes && <p className="text-sm text-foreground/80 bg-muted p-2 rounded-md italic">"{item.notes}"</p>}
+                            {item.notes && <p className="text-sm text-foreground/80 dark:text-stone-300 bg-muted dark:bg-stone-800 p-2 rounded-md italic">"{item.notes}"</p>}
                              <div className={`text-sm font-semibold px-2 py-1 rounded-full self-start ${getExpiryStatusColor(item.expiryDate)}`}>
                                 {t('pantry_expires')}: {new Date(item.expiryDate).toLocaleDateString(undefined, { timeZone: 'UTC' })}
                             </div>
@@ -142,38 +142,38 @@ const Pantry = () => {
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-16 px-6 bg-white rounded-2xl border border-border">
-                    <ShoppingBasket className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-xl font-bold font-display text-foreground">{t('pantry_empty_title')}</h3>
-                    <p className="text-muted-foreground mt-2">{t('pantry_empty_desc')}</p>
+                <div className="text-center py-16 px-6 bg-white dark:bg-stone-900 rounded-2xl border border-border dark:border-stone-800">
+                    <ShoppingBasket className="w-12 h-12 mx-auto text-muted-foreground dark:text-stone-500 mb-4" />
+                    <h3 className="text-xl font-bold font-display text-foreground dark:text-stone-100">{t('pantry_empty_title')}</h3>
+                    <p className="text-muted-foreground dark:text-stone-400 mt-2">{t('pantry_empty_desc')}</p>
                 </div>
             )}
 
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md animate-scaleIn relative">
-                        <button onClick={() => setIsModalOpen(false)} className="absolute top-4 right-4 p-2 text-muted-foreground hover:text-foreground">
+                    <div className="bg-white dark:bg-stone-900 rounded-2xl shadow-2xl p-8 w-full max-w-md animate-scaleIn relative">
+                        <button onClick={() => setIsModalOpen(false)} className="absolute top-4 right-4 p-2 text-muted-foreground dark:text-stone-400 hover:text-foreground dark:hover:text-stone-100">
                             <X />
                         </button>
                         <h2 className="text-2xl font-bold font-display text-center mb-6">{t('pantry_modal_title')}</h2>
                         <form onSubmit={handleAddItem} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-foreground">{t('pantry_modal_name')}</label>
-                                <input type="text" value={newItem.name} onChange={(e) => setNewItem({ ...newItem, name: e.target.value })} required className="mt-1 w-full p-3 border-2 border-border rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition shadow-input placeholder:text-primary/60 bg-stone-100" />
+                                <label className="block text-sm font-medium text-foreground dark:text-stone-200">{t('pantry_modal_name')}</label>
+                                <input type="text" value={newItem.name} onChange={(e) => setNewItem({ ...newItem, name: e.target.value })} required className="mt-1 w-full p-3 border-2 border-border dark:border-stone-700 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition shadow-input placeholder:text-primary/60 dark:placeholder:text-primary-light/60 bg-stone-100 dark:bg-stone-800" />
                             </div>
                             <div className="flex space-x-4">
                                 <div className="flex-1">
-                                    <label className="block text-sm font-medium text-foreground">{t('pantry_modal_quantity')}</label>
-                                    <input type="text" value={newItem.quantity} onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })} required className="mt-1 w-full p-3 border-2 border-border rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition shadow-input placeholder:text-primary/60 bg-stone-100" />
+                                    <label className="block text-sm font-medium text-foreground dark:text-stone-200">{t('pantry_modal_quantity')}</label>
+                                    <input type="text" value={newItem.quantity} onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })} required className="mt-1 w-full p-3 border-2 border-border dark:border-stone-700 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition shadow-input placeholder:text-primary/60 dark:placeholder:text-primary-light/60 bg-stone-100 dark:bg-stone-800" />
                                 </div>
                                 <div className="flex-1">
-                                    <label className="block text-sm font-medium text-foreground">{t('pantry_modal_expiry')}</label>
-                                    <input type="date" value={newItem.expiryDate} onChange={(e) => setNewItem({ ...newItem, expiryDate: e.target.value })} required className="mt-1 w-full p-3 border-2 border-border rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition shadow-input bg-stone-100" />
+                                    <label className="block text-sm font-medium text-foreground dark:text-stone-200">{t('pantry_modal_expiry')}</label>
+                                    <input type="date" value={newItem.expiryDate} onChange={(e) => setNewItem({ ...newItem, expiryDate: e.target.value })} required className="mt-1 w-full p-3 border-2 border-border dark:border-stone-700 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition shadow-input bg-stone-100 dark:bg-stone-800" />
                                 </div>
                             </div>
                              <div>
-                                <label className="block text-sm font-medium text-foreground">{t('pantry_modal_notes')}</label>
-                                <textarea value={newItem.notes} onChange={(e) => setNewItem({ ...newItem, notes: e.target.value })} className="mt-1 w-full p-3 border-2 border-border rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition shadow-input placeholder:text-primary/60 bg-stone-100" rows={2}></textarea>
+                                <label className="block text-sm font-medium text-foreground dark:text-stone-200">{t('pantry_modal_notes')}</label>
+                                <textarea value={newItem.notes} onChange={(e) => setNewItem({ ...newItem, notes: e.target.value })} className="mt-1 w-full p-3 border-2 border-border dark:border-stone-700 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition shadow-input placeholder:text-primary/60 dark:placeholder:text-primary-light/60 bg-stone-100 dark:bg-stone-800" rows={2}></textarea>
                             </div>
                             <button type="submit" className="w-full bg-primary text-primary-foreground font-bold py-3 px-4 rounded-xl text-lg hover:bg-primary-dark transition shadow-lg">{t('pantry_modal_add_button')}</button>
                         </form>

@@ -1,5 +1,4 @@
 import { GoogleGenAI, Type, Modality } from "@google/genai";
-import { toast } from 'react-toastify';
 import { Recipe, MealPlanDay, Language } from '../types';
 
 const MODEL_NAME = "gemini-flash-lite-latest";
@@ -11,7 +10,6 @@ try {
   ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 } catch (e) {
   console.error("Failed to initialize GoogleGenAI. Please check your API key.", e);
-  toast.error("AI Service failed to initialize. Please check API Key configuration.");
 }
 
 const getCuisineContext = (language) => {
@@ -27,13 +25,13 @@ const getCuisineContext = (language) => {
     ko: "전 세계적으로 인기 있는 요리에 집중하세요.",
     zh: "专注于全球流行的美食。",
     hi: "विश्व स्तर पर लोकप्रिय व्यंजनों पर ध्यान केंद्रित करें।",
-    ar: "ركز على المطابخ ذات الشعبية العالمية.",
+    ar: "ركز على المطابخ ذات الشعبية العالمية।",
   };
   return contexts[language] || contexts.en;
 };
 
 export const generateRecipes = async (ingredients, language, filters, searchQuery, advancedSearch) => {
-  if (!ai) return [];
+  if (!ai) throw new Error('AI Service not initialized.');
   try {
     const { numberOfRecipes, mealType, diet, cuisine, cookingTime, difficulty } = filters;
     const { mustHave, exclude } = advancedSearch;
@@ -99,13 +97,12 @@ export const generateRecipes = async (ingredients, language, filters, searchQuer
     return recipes.map(r => ({ ...r, id: crypto.randomUUID(), image: null, isSaved: false }));
   } catch (error) {
     console.error("Error generating recipes:", error);
-    toast.error("Failed to generate recipes. The AI's response might be unavailable or malformed. Please try again.");
-    return [];
+    throw new Error('error_recipe_generation');
   }
 };
 
 export const generateAiImage = async (prompt, isPremium, style = 'default', aspectRatio = '1:1') => {
-    if (!ai) return null;
+    if (!ai) throw new Error('AI Service not initialized.');
     try {
         if (isPremium) {
             const stylePrompts = {
@@ -137,8 +134,7 @@ export const generateAiImage = async (prompt, isPremium, style = 'default', aspe
         }
     } catch (error) {
         console.error("Error generating image:", error);
-        toast.error("Image generation failed.");
-        return null;
+        throw new Error('error_image_generation');
     }
 };
 
@@ -155,7 +151,7 @@ export const generateImagesForRecipes = (recipes, isPremium, onUpdate) => {
 };
 
 export const generateMealPlan = async (preferences, language): Promise<MealPlanDay[]> => {
-    if (!ai) return [];
+    if (!ai) throw new Error('AI Service not initialized.');
     try {
         const { diet, calories } = preferences;
         const dietPreference = diet ? `The user follows a ${diet} diet.` : '';
@@ -227,13 +223,12 @@ export const generateMealPlan = async (preferences, language): Promise<MealPlanD
 
     } catch (error) {
         console.error("Error generating meal plan:", error);
-        toast.error("Failed to generate a meal plan. The AI's response might be unavailable or malformed. Please try again.");
-        return [];
+        throw new Error('error_meal_plan_generation');
     }
 };
 
 export const translateRecipe = async (recipe, languageCode) => {
-    if (!ai) return recipe;
+    if (!ai) throw new Error('AI Service not initialized.');
     try {
         const contentToTranslate = {
             title: recipe.title,
@@ -269,20 +264,18 @@ export const translateRecipe = async (recipe, languageCode) => {
 
     } catch (error) {
         console.error("Error translating recipe:", error);
-        toast.error("Translation failed. Please try again.");
-        return recipe;
+        throw new Error('error_translation');
     }
 };
 
 export const findNearbyStores = async (latitude, longitude, shoppingList, language) => {
-    if (!ai) return { summary: "AI service not available.", sources: [] };
+    if (!ai) throw new Error('AI Service not initialized.');
     try {
         const listItems = shoppingList.map(item => item.name).join(', ');
-        if (!listItems) {
-            return { summary: "Your shopping list is empty. Add items to find nearby stores.", sources: [] };
-        }
-
-        const prompt = `Based on the user's location and this shopping list: [${listItems}], find the best nearby grocery stores. Provide a brief, helpful summary in ${language} of why these are good options, and list a few relevant stores.`;
+        
+        const prompt = listItems
+            ? `Based on the user's location and this shopping list: [${listItems}], find the best nearby grocery stores. Provide a brief, helpful summary in ${language} of why these are good options, and list a few relevant stores.`
+            : `Based on the user's location, find the best nearby grocery stores. The user has not provided a shopping list, so suggest general-purpose supermarkets and specialty food stores. Provide a brief, helpful summary in ${language} of why these are good options, and list a few relevant stores.`;
 
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
@@ -310,7 +303,6 @@ export const findNearbyStores = async (latitude, longitude, shoppingList, langua
 
     } catch (error) {
         console.error("Error finding nearby stores:", error);
-        toast.error("Could not find nearby stores. Please ensure location services are enabled.");
-        return { summary: "An error occurred while searching for stores. Please try again.", sources: [] };
+        throw new Error('error_find_stores_generic');
     }
 };

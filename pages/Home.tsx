@@ -4,26 +4,44 @@ import { AppContext } from '../context/AppContext';
 import { generateRecipes, generateImagesForRecipes } from '../services/geminiService';
 import { ChefHat, Search, SlidersHorizontal, Loader2, Sparkles, ChevronDown } from 'lucide-react';
 import Ads from '../components/Ads';
+import { toast } from 'react-toastify';
 
-// FIX: Moved component outside of Home to prevent re-creation on render and fix type errors.
-const FilterButton = ({ value, state, setState, children }) => (
+// FIX: Defined props type for FilterButton to ensure type safety.
+type FilterButtonProps = {
+    value: string;
+    state: string;
+    setState: React.Dispatch<React.SetStateAction<string>>;
+    children: React.ReactNode;
+};
+
+// FIX: Changed to React.FC to correctly handle component props.
+const FilterButton: React.FC<FilterButtonProps> = ({ value, state, setState, children }) => (
     <button
         type="button"
         onClick={() => setState(state === value ? '' : value)}
-        className={`px-4 py-2 text-sm font-semibold rounded-full border-2 transition-colors duration-200 ${state === value ? 'bg-primary border-primary text-primary-foreground' : 'bg-white text-muted-foreground border-border hover:border-primary/50 hover:text-foreground'}`}
+        className={`px-4 py-2 text-sm font-semibold rounded-full border-2 transition-colors duration-200 ${state === value ? 'bg-primary border-primary text-primary-foreground' : 'bg-white dark:bg-stone-800 text-muted-foreground dark:text-stone-300 border-border dark:border-stone-700 hover:border-primary/50 dark:hover:border-primary/50 hover:text-foreground dark:hover:text-white'}`}
     >
         {children}
     </button>
 );
 
-// FIX: Moved component outside of Home to prevent re-creation on render and fix type errors.
-const RadioButton = ({ value, name, state, setState, children }) => (
-  <label className={`px-4 py-2 text-sm font-semibold rounded-full border-2 transition-colors duration-200 cursor-pointer ${state == value ? 'bg-primary border-primary text-primary-foreground' : 'bg-white text-muted-foreground border-border hover:border-primary/50 hover:text-foreground'}`}>
+// FIX: Defined props type for RadioButton to ensure type safety.
+type RadioButtonProps = {
+    value: number;
+    name: string;
+    state: number;
+    setState: React.Dispatch<React.SetStateAction<number>>;
+    children: React.ReactNode;
+};
+
+// FIX: Changed to React.FC to correctly handle component props.
+const RadioButton: React.FC<RadioButtonProps> = ({ value, name, state, setState, children }) => (
+  <label className={`px-4 py-2 text-sm font-semibold rounded-full border-2 transition-colors duration-200 cursor-pointer ${state === value ? 'bg-primary border-primary text-primary-foreground' : 'bg-white dark:bg-stone-800 text-muted-foreground dark:text-stone-300 border-border dark:border-stone-700 hover:border-primary/50 dark:hover:border-primary/50 hover:text-foreground dark:hover:text-white'}`}>
       <input
           type="radio"
           name={name}
           value={value}
-          checked={state == value}
+          checked={state === value}
           onChange={(e) => setState(Number(e.target.value))}
           className="sr-only"
       />
@@ -61,26 +79,31 @@ const Home = () => {
         if (!query.trim()) return;
 
         setIsLoading(true);
-        const recipes = await generateRecipes(
-            activeTab === 'ingredients' ? ingredients : '',
-            language,
-            { numberOfRecipes, diet, cookingTime },
-            activeTab === 'search' ? searchQuery : '',
-            {}
-        );
-        
-        if (recipes && recipes.length > 0) {
-            setGeneratedRecipes(recipes);
-            await addToHistory(query, recipes.length);
-            navigate('/results');
+        try {
+            const recipes = await generateRecipes(
+                activeTab === 'ingredients' ? ingredients : '',
+                language,
+                { numberOfRecipes, diet, cookingTime },
+                activeTab === 'search' ? searchQuery : '',
+                {}
+            );
             
-            generateImagesForRecipes(recipes, user?.subscriptionStatus === 'active', (recipeId, imageUrl) => {
-                 setGeneratedRecipes(prevRecipes =>
-                    prevRecipes.map(r => r.id === recipeId ? { ...r, image: imageUrl } : r)
-                );
-            });
+            if (recipes && recipes.length > 0) {
+                setGeneratedRecipes(recipes);
+                await addToHistory(query, recipes.length);
+                navigate('/results');
+                
+                generateImagesForRecipes(recipes, user?.subscriptionStatus === 'active', (recipeId, imageUrl) => {
+                     setGeneratedRecipes(prevRecipes =>
+                        prevRecipes.map(r => r.id === recipeId ? { ...r, image: imageUrl } : r)
+                    );
+                });
+            }
+        } catch (error) {
+            toast.error(t(error.message));
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
     
 
@@ -93,19 +116,19 @@ const Home = () => {
             <div className="p-4 bg-primary/10 rounded-full mb-4">
               <ChefHat className="w-12 h-12 text-primary" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold font-display text-foreground">
+            <h1 className="text-4xl md:text-5xl font-extrabold font-display text-foreground dark:text-stone-50">
                 {t('home_title')}
             </h1>
-            <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
+            <p className="mt-4 text-lg text-muted-foreground dark:text-stone-400 max-w-2xl">
                 {t('home_subtitle')}
             </p>
 
-            <div className="w-full max-w-3xl mt-10 bg-white p-6 rounded-2xl shadow-card border border-border">
-                <div className="flex border-b border-border mb-6">
-                    <button onClick={() => setActiveTab('ingredients')} className={`flex-1 pb-3 font-semibold transition-colors duration-200 ${activeTab === 'ingredients' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}>
+            <div className="w-full max-w-3xl mt-10 bg-white dark:bg-stone-900 p-6 rounded-2xl shadow-card border border-border dark:border-stone-800">
+                <div className="flex border-b border-border dark:border-stone-700 mb-6">
+                    <button onClick={() => setActiveTab('ingredients')} className={`flex-1 pb-3 font-semibold transition-colors duration-200 ${activeTab === 'ingredients' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground dark:text-stone-400 hover:text-foreground dark:hover:text-stone-100'}`}>
                         {t('by_ingredients_tab')}
                     </button>
-                    <button onClick={() => setActiveTab('search')} className={`flex-1 pb-3 font-semibold transition-colors duration-200 ${activeTab === 'search' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}>
+                    <button onClick={() => setActiveTab('search')} className={`flex-1 pb-3 font-semibold transition-colors duration-200 ${activeTab === 'search' ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground dark:text-stone-400 hover:text-foreground dark:hover:text-stone-100'}`}>
                         {t('by_name_tab')}
                     </button>
                 </div>
@@ -116,7 +139,7 @@ const Home = () => {
                             value={ingredients}
                             onChange={(e) => setIngredients(e.target.value)}
                             placeholder={t('placeholder_ingredients')}
-                            className="w-full h-28 p-4 text-base border-2 bg-stone-100 border-border rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition placeholder:text-primary/60 shadow-input"
+                            className="w-full h-28 p-4 text-base border-2 bg-stone-100 dark:bg-stone-800 border-border dark:border-stone-700 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition placeholder:text-primary/60 dark:placeholder:text-primary-light/60 shadow-input"
                         />
                     ) : (
                         <input
@@ -124,20 +147,20 @@ const Home = () => {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder={t('placeholder_search')}
-                            className="w-full p-4 text-base border-2 bg-stone-100 border-border rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition placeholder:text-primary/60 shadow-input"
+                            className="w-full p-4 text-base border-2 bg-stone-100 dark:bg-stone-800 border-border dark:border-stone-700 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary transition placeholder:text-primary/60 dark:placeholder:text-primary-light/60 shadow-input"
                         />
                     )}
 
                     <div className="mt-6">
-                        <button type="button" onClick={() => setIsAdvancedOpen(!isAdvancedOpen)} className="w-full flex justify-between items-center text-left p-3 rounded-lg hover:bg-muted">
-                            <span className="font-semibold text-foreground">{t('advanced_options')}</span>
-                            <ChevronDown className={`w-5 h-5 text-muted-foreground transition-transform ${isAdvancedOpen ? 'rotate-180' : ''}`} />
+                        <button type="button" onClick={() => setIsAdvancedOpen(!isAdvancedOpen)} className="w-full flex justify-between items-center text-left p-3 rounded-lg hover:bg-muted dark:hover:bg-stone-800/50">
+                            <span className="font-semibold text-foreground dark:text-stone-100">{t('advanced_options')}</span>
+                            <ChevronDown className={`w-5 h-5 text-muted-foreground dark:text-stone-400 transition-transform ${isAdvancedOpen ? 'rotate-180' : ''}`} />
                         </button>
 
                         {isAdvancedOpen && (
                             <div className="mt-4 space-y-6 animate-fadeIn">
                                 <div>
-                                    <h3 className="text-lg font-semibold text-foreground mb-3 text-left">{t('number_of_recipes')}</h3>
+                                    <h3 className="text-lg font-semibold text-foreground dark:text-stone-100 mb-3 text-left">{t('number_of_recipes')}</h3>
                                     <div className="flex flex-wrap gap-3">
                                         {[1, 2, 3, 4, 5].map(num => (
                                             <RadioButton key={num} value={num} name="numberOfRecipes" state={numberOfRecipes} setState={setNumberOfRecipes}>{num} {t('recipes')}</RadioButton>
@@ -145,7 +168,7 @@ const Home = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-semibold text-foreground mb-3 text-left">{t('dietary_preferences')}</h3>
+                                    <h3 className="text-lg font-semibold text-foreground dark:text-stone-100 mb-3 text-left">{t('dietary_preferences')}</h3>
                                     <div className="flex flex-wrap gap-3">
                                         <FilterButton value="Vegetarian" state={diet} setState={setDiet}>{t('vegetarian')}</FilterButton>
                                         <FilterButton value="Vegan" state={diet} setState={setDiet}>{t('vegan')}</FilterButton>
@@ -157,7 +180,7 @@ const Home = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-semibold text-foreground mb-3 text-left">{t('cooking_time')}</h3>
+                                    <h3 className="text-lg font-semibold text-foreground dark:text-stone-100 mb-3 text-left">{t('cooking_time')}</h3>
                                     <div className="flex flex-wrap gap-3">
                                         <FilterButton value="" state={cookingTime} setState={setCookingTime}>{t('any_time')}</FilterButton>
                                         <FilterButton value="fast" state={cookingTime} setState={setCookingTime}>{t('fast_time')}</FilterButton>
@@ -173,7 +196,7 @@ const Home = () => {
                         type="button"
                         onClick={handleGenerateClick}
                         disabled={isLoading}
-                        className="w-full bg-secondary text-secondary-foreground font-bold py-4 px-6 rounded-xl text-lg hover:bg-secondary-dark transition-all duration-300 shadow-lg disabled:bg-muted disabled:text-muted-foreground flex items-center justify-center transform hover:scale-105 mt-6"
+                        className="w-full bg-secondary text-secondary-foreground font-bold py-4 px-6 rounded-xl text-lg hover:bg-secondary-dark transition-all duration-300 shadow-lg disabled:bg-muted dark:disabled:bg-stone-700 disabled:text-muted-foreground dark:disabled:text-stone-500 flex items-center justify-center transform hover:scale-105 mt-6"
                     >
                         {isLoading ? (
                             <Loader2 className="w-6 h-6 animate-spin" />
