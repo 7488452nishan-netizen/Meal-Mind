@@ -1,3 +1,4 @@
+
 import React, { useState, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import { findNearbyStores } from '../services/geminiService';
@@ -63,17 +64,18 @@ const ShoppingAssistant = () => {
     const [results, setResults] = useState(null);
 
     const handleFindStores = () => {
+        setIsLoading(true);
+        setLocationStatus(t('getting_location'));
+        setResults(null);
+        
         if (user?.subscriptionStatus !== 'active') {
             window.open('https://www.effectivegatecpm.com/hzw1vrc0b?key=9da518ea4a20115382089c5630b72478', '_blank');
         }
 
-        setIsLoading(true);
-        setLocationStatus(t('getting_location'));
-        setResults(null);
-
         if (!navigator.geolocation) {
             toast.error(t('error_geolocation_unsupported'));
             setIsLoading(false);
+            setLocationStatus('');
             return;
         }
 

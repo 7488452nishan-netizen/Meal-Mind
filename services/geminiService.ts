@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 import { Recipe, MealPlanDay, Language } from '../types';
 
@@ -5,12 +6,20 @@ const MODEL_NAME = "gemini-flash-lite-latest";
 const IMAGE_MODEL_NAME_PREMIUM = "imagen-4.0-generate-001";
 const IMAGE_MODEL_NAME_STANDARD = "gemini-2.5-flash-image";
 
-let ai;
-try {
-  ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-} catch (e) {
-  console.error("Failed to initialize GoogleGenAI. Please check your API key.", e);
-}
+// Lazy initialization for the AI client
+const getAiClient = () => {
+    try {
+        const apiKey = process.env.API_KEY;
+        if (!apiKey) {
+            console.error("API key is not available.");
+            return null;
+        }
+        return new GoogleGenAI({ apiKey });
+    } catch (e) {
+        console.error("Failed to initialize GoogleGenAI. Please check your API key.", e);
+        return null;
+    }
+};
 
 const getCuisineContext = (language) => {
   const contexts = {
@@ -31,6 +40,7 @@ const getCuisineContext = (language) => {
 };
 
 export const generateRecipes = async (ingredients, language, filters, searchQuery, advancedSearch) => {
+  const ai = getAiClient();
   if (!ai) throw new Error('AI Service not initialized.');
   try {
     const { numberOfRecipes, mealType, diet, cuisine, cookingTime, difficulty } = filters;
@@ -102,6 +112,7 @@ export const generateRecipes = async (ingredients, language, filters, searchQuer
 };
 
 export const generateAiImage = async (prompt, isPremium, style = 'default', aspectRatio = '1:1') => {
+    const ai = getAiClient();
     if (!ai) throw new Error('AI Service not initialized.');
     try {
         if (isPremium) {
@@ -151,6 +162,7 @@ export const generateImagesForRecipes = (recipes, isPremium, onUpdate) => {
 };
 
 export const generateMealPlan = async (preferences, language): Promise<MealPlanDay[]> => {
+    const ai = getAiClient();
     if (!ai) throw new Error('AI Service not initialized.');
     try {
         const { diet, calories } = preferences;
@@ -228,6 +240,7 @@ export const generateMealPlan = async (preferences, language): Promise<MealPlanD
 };
 
 export const translateRecipe = async (recipe, languageCode) => {
+    const ai = getAiClient();
     if (!ai) throw new Error('AI Service not initialized.');
     try {
         const contentToTranslate = {
@@ -269,6 +282,7 @@ export const translateRecipe = async (recipe, languageCode) => {
 };
 
 export const findNearbyStores = async (latitude, longitude, shoppingList, language) => {
+    const ai = getAiClient();
     if (!ai) throw new Error('AI Service not initialized.');
     try {
         const listItems = shoppingList.map(item => item.name).join(', ');

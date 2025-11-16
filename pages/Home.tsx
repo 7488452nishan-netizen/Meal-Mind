@@ -1,3 +1,4 @@
+
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
@@ -62,23 +63,17 @@ const Home = () => {
     const [diet, setDiet] = useState('');
     const [cookingTime, setCookingTime] = useState('');
 
-    const handleGenerateClick = (e) => {
+    const handleGenerateClick = async (e) => {
         e.preventDefault();
         const query = activeTab === 'ingredients' ? ingredients : searchQuery;
         if (!query.trim()) return;
+
+        setIsLoading(true);
 
         if (user?.subscriptionStatus !== 'active') {
             window.open('https://www.effectivegatecpm.com/hzw1vrc0b?key=9da518ea4a20115382089c5630b72478', '_blank');
         }
         
-        generateAndNavigate();
-    };
-
-    const generateAndNavigate = async () => {
-        const query = activeTab === 'ingredients' ? ingredients : searchQuery;
-        if (!query.trim()) return;
-
-        setIsLoading(true);
         try {
             const recipes = await generateRecipes(
                 activeTab === 'ingredients' ? ingredients : '',
@@ -98,6 +93,8 @@ const Home = () => {
                         prevRecipes.map(r => r.id === recipeId ? { ...r, image: imageUrl } : r)
                     );
                 });
+            } else {
+                 toast.info(t('results_not_found_desc'));
             }
         } catch (error) {
             toast.error(t(error.message));

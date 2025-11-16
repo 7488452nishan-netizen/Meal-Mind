@@ -1,3 +1,4 @@
+
 import React, { useState, useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import PremiumBanner from '../components/PremiumBanner';
@@ -14,12 +15,13 @@ const Planner = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleGeneratePlan = async () => {
+        setIsLoading(true);
+        setMealPlan([]);
+
         if (user?.subscriptionStatus !== 'active') {
             window.open('https://www.effectivegatecpm.com/hzw1vrc0b?key=9da518ea4a20115382089c5630b72478', '_blank');
         }
 
-        setIsLoading(true);
-        setMealPlan([]);
         try {
             const plan = await generateMealPlan(preferences, language);
             setMealPlan(plan);
